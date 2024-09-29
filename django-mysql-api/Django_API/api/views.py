@@ -3,7 +3,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from .models import *
-from ard_conn_v4 import orden_django
+from .ard_conn_v4 import orden_django as arduino
 import json
  
 # Create your views here.
@@ -480,7 +480,7 @@ class MonitoreroServicioHasCamarasView(View):
 
     def get(self, request, id=0):
         if(id>0):
-            events=list(MonitoreroServicioHasCamaras.objects.filter(id=id).values())
+            events=list(MonitoreoServicioHasCamaras.objects.filter(id=id).values())
             if len(events) > 0:
                 event=events[0]
                 datos = {'message': "Success", 'Cameras Monitor': event}
@@ -488,7 +488,7 @@ class MonitoreroServicioHasCamarasView(View):
                 datos= {'message': "Cameras Monitor not found"}
             return JsonResponse(datos)
         else:
-            events= list(MonitoreroServicioHasCamaras.objects.values())
+            events= list(MonitoreoServicioHasCamaras.objects.values())
             if len(events)>0:
                 datos= {'message': "Success",'Cameras Monitor Users':events}
             else:
@@ -497,15 +497,15 @@ class MonitoreroServicioHasCamarasView(View):
 
     def post(self, request):
         jd = json.loads(request.body)
-        MonitoreroServicioHasCamaras.objects.create(monitorero_servicio=jd['monitoreo_servicio'],monitorero_servicio_usuario=jd['monitoreo_servicio_usuario'],camaras=jd['camaras'])
+        MonitoreoServicioHasCamaras.objects.create(monitorero_servicio=jd['monitoreo_servicio'],monitorero_servicio_usuario=jd['monitoreo_servicio_usuario'],camaras=jd['camaras'])
         datos= {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
         jd = json.loads(request.body)
-        events= list(MonitoreroServicioHasCamaras.objects.filter(id=id).values())
+        events= list(MonitoreoServicioHasCamaras.objects.filter(id=id).values())
         if len(events) > 0:
-            event= MonitoreroServicioHasCamaras.objects.get(id=id)
+            event= MonitoreoServicioHasCamaras.objects.get(id=id)
             event.monitorero_servicio= jd['monitoreo_servicio']
             event.monitorero_servicio_usuario= jd['monitoreo_servicio_usuario']
             event.camaras= jd['camaras']
@@ -516,9 +516,9 @@ class MonitoreroServicioHasCamarasView(View):
         return JsonResponse(datos)
 
     def delete(self, request, id):
-        events= list(MonitoreroServicioHasCamaras.objects.filter(id=id).values())
+        events= list(MonitoreoServicioHasCamaras.objects.filter(id=id).values())
         if len(events) > 0:
-            MonitoreroServicioHasCamaras.objects.filter(id=id).delete()
+            MonitoreoServicioHasCamaras.objects.filter(id=id).delete()
             datos= {'message': "Success"}
         else:
             datos= {'message': "Cameras Monitor not found"}
@@ -1101,7 +1101,7 @@ class ComandosArduinoView(View):
                 l2 = jd['l2']
                 sx = jd['sx']
                 sy = jd['sy']
-                orden_django(l1,l2,sx,sy)
+                arduino(l1,l2,sx,sy)
                 datos= {'mensaje': "Comando recibido correctamente"}
                 return JsonResponse(datos)
             else:
