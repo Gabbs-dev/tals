@@ -46,5 +46,5 @@ urlpatterns = [
     path('watertankevents/<int:id>',TanqueAguaHasEventoView.as_view(), name='watertankevent_process'),
     path('thermostatevents/',TermostatoHasEventoView.as_view(), name='thermostatevents_list'),
     path('thermostatevents/<int:id>',TermostatoHasEventoView.as_view(), name='thermostatevent_process'),
-    path('ard_commands/',ComandosArduinoView.as_view(), name='ard_commands'),
+    #path('ard_commands/',ComandosArduinoView.as_view(), name='ard_commands'),
 ]

@@ -3,12 +3,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from .models import *
-from .ard_conn_v4 import orden_django as arduino
 import json
- 
-# Create your views here.
 
-
+# Create your views here
 
 class UsuarioView(View):
 
@@ -1089,22 +1086,3 @@ class TermostatoHasEventoView(View):
         else:
             datos= {'message': "Thermostat Event not found"}
         return JsonResponse(datos)
-
-class ComandosArduinoView(View):
-    @csrf_exempt
-    def recibir_comando(self, request):
-        if request.method == 'POST':
-            comando = request.POST.get('comando')
-            if not comando.empty():
-                jd = json.loads(comando.body)
-                l1 = jd['l1']
-                l2 = jd['l2']
-                sx = jd['sx']
-                sy = jd['sy']
-                arduino(l1,l2,sx,sy)
-                datos= {'mensaje': "Comando recibido correctamente"}
-                return JsonResponse(datos)
-            else:
-                return JsonResponse({'Error': 'No se pudu enviar el comando'})
-        else:
-            return JsonResponse({'Error': 'Método no permitido'})

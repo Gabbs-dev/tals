@@ -3,8 +3,11 @@ import json
 import mysql.connector
 import asyncio
 from queue import Queue
+import socketio
 
-# Conexion a la Base de Datos
+# Definir conexiones
+
+# Base de Datos
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
@@ -12,7 +15,42 @@ mydb = mysql.connector.connect(
   database="serial_test"
 )
 
-ser = serial.Serial('COM4', 9600)
+# Socket para recibir datos de React
+sio = socketio.Server(async_mode='asgiio')
+@sio.event
+async def connect(sid, environ):
+  print('Client connected:', sid)
+if __name__ == '__main__':
+  sio.run(host='127.0.0.1', port=8001)  # Bind to all interfaces (optional)
+
+@sio.event
+async def enviar_comando(sid, data):
+    print('Received command:', data)
+    comando = procesar_comando_react(data)
+    if comando:
+        command_queue.put(comando)
+    else:
+        # Manejar el error de formato de datos inválido
+        await sio.emit('error', 'Formato de datos inválido', namespace='/')
+
+# Recibir React
+async def procesar_comando_react(data):
+    """Procesa los datos recibidos de React y construye el comando para el serial.
+    Args:
+        data (dict): Diccionario scon los datos recibidos.
+    Returns:
+        str: Comando a enviar al puerto serial.
+    """
+    try:
+        l1 = data['l1']
+        l2 = data['l2']
+        sx = data['sx']
+        sy = data['sy']
+        # ... (validaciones adicionales si es necesario)
+        return f"{l1},{l2},{sx},{sy}\n"
+    except KeyError:
+        print("Error: Formato de datos inválido")
+        return None
 
 # Funciones para insertar datos en la base de datos
 async def insertar_na(nivel_agua):
@@ -47,6 +85,7 @@ async def insertar_luz(luz1,luz2):
   mydb.commit()
   print("Data succesfully inserted [luminarias]")
 
+# Cola de peticiones
 command_queue = Queue()
 
 # Funciones de comunicaion Arduino-Python
@@ -54,7 +93,7 @@ async def enviar_comando():
   while True:
     if not command_queue.empty():
       comando = command_queue.get()
-      async with ser:
+      async with serial.Serial('COM1',9600) as ser:
         await ser.write(comando.encode('utf-8'))
         print("Data sent successfully")
       asyncio.sleep(2)
@@ -63,6 +102,7 @@ async def enviar_comando():
       asyncio.sleep(1)
 
 async def recibir_y_guardar_datos():
+  ser = serial.Serial('COM2',9600)
   while True:
     data = ser.readline().decode('utf-8').strip()
     if data:
@@ -90,24 +130,15 @@ async def recibir_y_guardar_datos():
       print("Error: Error al leer o enviar los datos")
       asyncio.sleep(1)
 
+'''
 async def orden_django(l1,l2,sx,sy):
   comando = f"{l1},{l2},{sx},{sy}\n"
   command_queue.put(comando)
-
+'''
 async def main():
   # Crear una tarea para recibir datos
   task_r = asyncio.create_task(recibir_y_guardar_datos())
   while True:
-    # Aqui la funcion para recibir datos desde Django
-    nuevo_comando = orden_django()
-    if not nuevo_comando.empty():
-      enviar_comando()
-      nuevo_comando = [ ]
-    else:
       await task_r
 
-if ser:
-  print('Conexión exitosa')
-  asyncio.run(main())
-else:
-  ('No se pudo encontrar el puerto especificado')
+asyncio.run(main())
