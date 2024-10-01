@@ -1,17 +1,24 @@
 import socket
+import json
 
-HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
-PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
+host = '127.0.0.1' # Direccion IP localhost
+port = 12345       # Puerto
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, PORT))
-    s.listen()
-    conn, addr = s.accept()
-    with conn:
-        print('Connected by', addr)
-        while True:
-            data = conn.recv(1024)
-            if not data:
-                break
-            # Procesar los datos recibidos y enviar una respuesta
-            conn.sendall(data)
+my_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+my_server.bind( (host,port) )
+my_server.listen(5)
+
+print('Servidor escuchando en ', host, ':', port)
+
+while True:
+    conn, addr = my_server.accept()
+    print('Conexion establecida')
+
+    while True:
+        data = conn.recv(1024)
+        if data:
+            
+
+        print('Datos recibidos: ', jd.decode())
+        conn.sendall(b"{'message': Mensaje Recibido }")
+    conn.close()

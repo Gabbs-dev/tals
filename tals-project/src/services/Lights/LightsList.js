@@ -48,8 +48,7 @@ const LightsList = () => {
                 <div className="d-flex align-items-center justify-content-between card-header">
                     <h4>Resumen Global</h4>
                     <button className='btn btn-primary'>Configurar Dispositivo</button>
-                </div>
-              
+                </div>    
                 <div className="card-body">
                     <table class="table table-striped">
                         <thead>

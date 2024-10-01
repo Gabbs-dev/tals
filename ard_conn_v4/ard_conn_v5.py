@@ -2,8 +2,8 @@ import serial
 import json
 import mysql.connector
 import asyncio
+import socket
 from queue import Queue
-import socketio
 
 # Definir conexiones
 
@@ -12,78 +12,104 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   password="admin",
-  database="serial_test"
+  database="tals"
 )
 
-# Socket para recibir datos de React
-sio = socketio.Server(async_mode='asgiio')
-@sio.event
-async def connect(sid, environ):
-  print('Client connected:', sid)
-if __name__ == '__main__':
-  sio.run(host='127.0.0.1', port=8001)  # Bind to all interfaces (optional)
 
-@sio.event
-async def enviar_comando(sid, data):
-    print('Received command:', data)
-    comando = procesar_comando_react(data)
-    if comando:
-        command_queue.put(comando)
+# Funcion para conectar el socket
+async def puerto_socket(): 
+  # Socket para recibir datos de React
+  my_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  inicio_server = my_server.bind( ('127.0.0.1',8001) )
+  server_escucha = my_server.listen(5)
+  if inicio_server:
+    print('Servidor escuchando en ', host, ':', port)
+    if server_escucha:
+      while True:
+        conn, addr = my_server.accept()
+        print('Conexion establecida')
+        print(addr)
+        while True:
+          data = conn.recv(1024)
+          if data:
+            procesar_comando_react(data)
+            conn.sendall(b'Comandos recibidos correctamemte')
+          else:
+            print(b'Esperando comandos')
+          conn.close()
     else:
-        # Manejar el error de formato de datos inválido
-        await sio.emit('error', 'Formato de datos inválido', namespace='/')
+      print('El servidor no esta escuchando')
+  else:
+    print('No se pudo inicializar el servidor')
 
 # Recibir React
 async def procesar_comando_react(data):
-    """Procesa los datos recibidos de React y construye el comando para el serial.
-    Args:
-        data (dict): Diccionario scon los datos recibidos.
-    Returns:
-        str: Comando a enviar al puerto serial.
-    """
-    try:
-        l1 = data['l1']
-        l2 = data['l2']
-        sx = data['sx']
-        sy = data['sy']
-        # ... (validaciones adicionales si es necesario)
-        return f"{l1},{l2},{sx},{sy}\n"
-    except KeyError:
-        print("Error: Formato de datos inválido")
-        return None
+  """Procesa los datos recibidos de React y construye el comando para el serial.
+  Args:
+    data (dict): Diccionario scon los datos recibidos.
+  Returns:
+    str: Comando a enviar al puerto serial.
+  """
+  try:
+    l1 = int(data['l1'])
+    l2 = int(data['l2'])
+    sx = int(data['sx'])
+    sy = int(data['sy'])
+    comando = f"{l1},{l2},{sx},{sy}\n"
+    command_queue(comando)
+  except KeyError:
+    print(F"Error: No se pudieron enviar los datos")
+    return None
+  except ValueError:
+    print("Error: Los valores deben ser números enteros")
 
 # Funciones para insertar datos en la base de datos
 async def insertar_na(nivel_agua):
-  mycursor = mydb.cursor()
-  sql = "INSERT INTO ultrasonico (cm) VALUES (%s)"
-  val = (nivel_agua,)
-  mycursor.execute(sql, val)
-  mydb.commit()
-  print("Data succesfully inserted [nivel_agua]")
+  try:
+    mycursor = mydb.cursor()
+    sql = "INSERT INTO tanque_agua (nivel_agua) VALUES (%s)"
+    val = (nivel_agua,)
+    mycursor.execute(sql, val)
+    mydb.commit()
+    print("Data succesfully inserted [nivel_agua]")
+  except mysql.connector.Error as err:
+    print(f"Error al insertar datos en la base de datos: {err}")
 
 async def insertar_mv(movimiento):
-  mycursor = mydb.cursor()
-  sql = "INSERT INTO movimiento (estado) VALUES (%s)"
-  val = (movimiento,)
-  mycursor.execute(sql, val)
-  mydb.commit()
-  print("Data succesfully inserted [movimiento]")
+  try:
+    mycursor = mydb.cursor()
+    sql = "INSERT INTO sensor_movimiento (estado) VALUES (%s)"
+    val = (movimiento,)
+    mycursor.execute(sql, val)
+    mydb.commit()
+    print("Data succesfully inserted [movimiento]")
+  except mysql.connector.Error as err:
+    print(f"Error al insertar datos en la base de datos: {err}")
+
 
 async def insertar_tmph(temperatura,humedad):
-  mycursor = mydb.cursor()
-  sql = "INSERT INTO termometro (temperatura,humedad) VALUES (%s,%s)"
-  val = (temperatura,humedad)
-  mycursor.execute(sql, val)
-  mydb.commit()
-  print("Data succesfully inserted [termostato]")
+  try:
+    mycursor = mydb.cursor()
+    sql = "INSERT INTO termostato (temperatura,humedad) VALUES (%s,%s)"
+    val = (temperatura,humedad)
+    mycursor.execute(sql, val)
+    mydb.commit()
+    print("Data succesfully inserted [termostato]")
+  except mysql.connector.Error as err:
+    print(f"Error al insertar datos en la base de datos: {err}")
+
 
 async def insertar_luz(luz1,luz2):
-  mycursor = mydb.cursor()
-  sql = "INSERT INTO luminaria (estado_rele,estado_rele2) VALUES (%s,%s)"
-  val = (luz1,luz2)
-  mycursor.execute(sql, val)
-  mydb.commit()
-  print("Data succesfully inserted [luminarias]")
+  try:
+    mycursor = mydb.cursor()
+    sql = "INSERT INTO luminaria (luz1,luz2) VALUES (%s,%s)"
+    val = (luz1,luz2)
+    mycursor.execute(sql, val)
+    mydb.commit()
+    print("Data succesfully inserted [luminarias]")
+  except mysql.connector.Error as err:
+    print(f"Error al insertar datos en la base de datos: {err}")
+
 
 # Cola de peticiones
 command_queue = Queue()
@@ -96,11 +122,12 @@ async def enviar_comando():
       async with serial.Serial('COM1',9600) as ser:
         await ser.write(comando.encode('utf-8'))
         print("Data sent successfully")
-      asyncio.sleep(2)
+      await asyncio.sleep(2)
     else:
       # Esperar un segundo si no hay comandos por enviar
-      asyncio.sleep(1)
+      await asyncio.sleep(1)
 
+# Recibir datos de arduino a traves del puerto virtual de comunicacion "COM2"
 async def recibir_y_guardar_datos():
   ser = serial.Serial('COM2',9600)
   while True:
@@ -123,19 +150,17 @@ async def recibir_y_guardar_datos():
 
       except (serial.SerialException, json.JSONDecodeError, mysql.connector.Error) as e:
         print(f"Error: {e}")
-      #ser.close()
-      asyncio.sleep(2)
+      await asyncio.sleep(2)
     else:
       # Esperar un segundo si existe algun error en la lectura o envio de los datos
       print("Error: Error al leer o enviar los datos")
-      asyncio.sleep(1)
+      await asyncio.sleep(1)
 
-'''
-async def orden_django(l1,l2,sx,sy):
-  comando = f"{l1},{l2},{sx},{sy}\n"
-  command_queue.put(comando)
-'''
+# Main xd
 async def main():
+  # Inicializar el puerto socket (supuestamente)
+  task_server = asyncio.create_task(puerto_socket())
+  await task_server
   # Crear una tarea para recibir datos
   task_r = asyncio.create_task(recibir_y_guardar_datos())
   while True:
