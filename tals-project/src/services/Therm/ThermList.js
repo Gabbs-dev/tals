@@ -6,19 +6,18 @@ import TempCharts from '../../Charts/TempChart';
 const ThermList = () => {
     const [Thermostats, setThermostat] = useState([]);
 
-    const listTherms = async () => {
+    const listTherm = async () => {
         try{
-            const res = await ThermServer.listTherms();
-            const data = await res.json();
-            console.log(data);
-            setThermostat(data.Thermostats);
+            const res = await ThermServer.getLastThermostat();
+            console.log(res);
+            setThermostat(res.Thermostats);
         }catch(error){
             console.log(error);
         }
     };
 
     useEffect(() => {
-        listTherms();
+        listTherm();
     }, []);
 
     return (
@@ -34,7 +33,7 @@ const ThermList = () => {
             <h2 className='display-6 mt-5'>Dispositivos Activos</h2>
             <hr className='divider'/>
             {Thermostats.map((termostato)=>(
-                <ThermostatItem key={termostato.id} termostato={termostato} listTherms={listTherms} />
+                <ThermostatItem key={termostato.id} termostato={termostato} listTherm={listTherm} />
             ))}
             <h2 className='display-6 mt-5'>Configuracion</h2>
             <hr className='divider'/>

@@ -385,12 +385,19 @@ class TermostatoView(View):
                 datos= {'message': "Thermostat not found"}
             return JsonResponse(datos)
         else:
-            therm= list(Termostato.objects.values())
-            if len(therm)>0:
-                datos= {'message': "Success",'Thermostats':therm}
+            last_thermostat = Termostato.objects.order_by('date').last()
+            if last_thermostat:
+                data = {
+                    'id': last_thermostat.id,
+                    'temperatura': last_thermostat.temperatura,
+                    'humedad': last_thermostat.humedad,
+                    'temperatura_deseada': last_thermostat.temperatura_deseada,
+                    'date': last_thermostat.date,
+                }
+                datos = {'message': "Success", 'Last_Thermostat': data}
             else:
-                datos= {'message': "Thermostats not found"}
-            return JsonResponse(datos) 
+                datos = {'message': "Data not found"}
+            return JsonResponse(datos)
 
     def post(self, request):
         jd = json.loads(request.body)

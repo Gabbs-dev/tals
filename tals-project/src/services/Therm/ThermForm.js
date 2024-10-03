@@ -22,7 +22,6 @@ const ThermForm = () => {
             let res;
             res= await ThermServer.registerTherm(Thermostats);
             const data= await res.json();
-            //console.log(data);
             if(data.message==="Success"){
                 setTherm(initialState);
             }
@@ -39,7 +38,7 @@ const ThermForm = () => {
             const {registro_temperatura,temperatura_deseada,date}= data.Thermostats;
             setTherm({registro_temperatura,temperatura_deseada,date});
         }catch(error){
-            console.log(error);
+            console.log(error); 
         }
     };
     useEffect(() => {

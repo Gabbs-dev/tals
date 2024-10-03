@@ -19,28 +19,33 @@ mydb = mysql.connector.connect(
 # Funcion para conectar el socket
 async def puerto_socket(): 
   # Socket para recibir datos de React
-  my_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  inicio_server = my_server.bind( ('127.0.0.1',8001) )
-  server_escucha = my_server.listen(5)
-  if inicio_server:
-    print('Servidor escuchando en ', host, ':', port)
-    if server_escucha:
-      while True:
-        conn, addr = my_server.accept()
-        print('Conexion establecida')
-        print(addr)
+  host = '127.0.0.1'
+  port = 12345
+  try:
+    my_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    inicio_server = my_server.bind( (host,port) )
+    server_escucha = my_server.listen(5)
+    if inicio_server:
+      print('Servidor escuchando en ', host, ':', port)
+      if server_escucha:
         while True:
-          data = conn.recv(1024)
-          if data:
-            procesar_comando_react(data)
-            conn.sendall(b'Comandos recibidos correctamemte')
-          else:
-            print(b'Esperando comandos')
-          conn.close()
+          conn, addr = my_server.accept()
+          print('Conexion establecida')
+          print(addr)
+          while True:
+            data = conn.recv(1024)
+            if data:
+              procesar_comando_react(data)
+              conn.sendall(b'Comandos recibidos correctamemte')
+            else:
+              print(b'Esperando comandos')
+            conn.close()
+      else:
+        print('El servidor no esta escuchando')
     else:
-      print('El servidor no esta escuchando')
-  else:
-    print('No se pudo inicializar el servidor')
+      print('No se pudo inicializar el servidor')
+  except:
+    print(F'Error: No se pudo establecer conexion')
 
 # Recibir React
 async def procesar_comando_react(data):
