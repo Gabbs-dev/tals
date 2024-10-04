@@ -1,40 +1,46 @@
 ﻿import React, { useEffect, useState } from 'react';
-import * as ThermServer from './ThermServer';
 import ThermostatItem from './ThermostatItem';
 import TempCharts from '../../Charts/TempChart';
+import * as ThermServer from './ThermServer';
 
 const ThermList = () => {
-    const [Thermostats, setThermostat] = useState([]);
+    const [Termostato, setTermostato] = useState([]);
 
-    const listTherm = async () => {
+    const actualState = async () => {
         try{
             const res = await ThermServer.getLastThermostat();
-            console.log(res);
-            setThermostat(res.Thermostats);
+            const data = res.json();
+            console.log(data);
+            setTermostato(data.Termostato);
         }catch(error){
             console.log(error);
+            return null;
         }
     };
 
     useEffect(() => {
-        listTherm();
-    }, []);
+        actualState();
+        // Actualizar cada 5 segundos (ajusta el intervalo según tus necesidades)
+        const interval = setInterval(actualState, 5000);
+        // Limpiar el intervalo cuando el componente se desmonte
+        return () => clearInterval(interval);
+    }, [] );
 
     return (
         <div className='row'>
             <h1 className='display-5'>Panel de Control / Temperatura</h1>
             <hr className='divider'/>
             <div className="card text-bg-light mx-3 my-3">
-              <div className="card-header">Resumen Global</div>
+                <div className="card-header">Resumen Global</div>
                 <div className="card-body">
                     <TempCharts/>
                 </div>
             </div>
             <h2 className='display-6 mt-5'>Dispositivos Activos</h2>
             <hr className='divider'/>
-            {Thermostats.map((termostato)=>(
-                <ThermostatItem key={termostato.id} termostato={termostato} listTherm={listTherm} />
-            ))}
+            {Termostato.map((termostato)=>(
+                <ThermostatItem key={termostato.id} termostato={termostato} actualState={actualState} />
+            ))} 
             <h2 className='display-6 mt-5'>Configuracion</h2>
             <hr className='divider'/>
             <div className="card text-bg-light mx-3 my-3">

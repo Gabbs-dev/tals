@@ -1,16 +1,4 @@
-﻿import React, { useState } from "react";
-import { useNavigate } from "react-router";
-import * as LightsServer from './LightsServer';
-
-
-const LightItem = ({luminaria, listLights}) => {
-    const navigate = useNavigate();
-
-    const handleDelete = async (ThermID) =>{
-        //console.log(ThermID);
-        //await ThermServer.deleteUser(ThermID);
-        listLights();
-    };
+﻿const LightItem = ({luminaria, listLights}) => {
 
     return(
         <div className="col-md-4 my-3">
@@ -21,7 +9,6 @@ const LightItem = ({luminaria, listLights}) => {
                 <p className="card-text">Estado: <strong>{luminaria.auto_encendido} </strong></p>
                 <p className="card-text">Estado: <strong>{luminaria.auto_apagado} </strong></p>
                 <p className="card-text">Estado: <strong>{luminaria.date} </strong></p>
-                {/*}<button onClick={()=>luminaria.id && handleDelete(luminaria.id)} className="btn btn-danger my-2">Eliminar</button>{*/}
             </div>
         </div>
     );

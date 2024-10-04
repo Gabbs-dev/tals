@@ -394,7 +394,7 @@ class TermostatoView(View):
                     'temperatura_deseada': last_thermostat.temperatura_deseada,
                     'date': last_thermostat.date,
                 }
-                datos = {'message': "Success", 'Last_Thermostat': data}
+                datos = {'message': "Success", 'Thermostat': data}
             else:
                 datos = {'message': "Data not found"}
             return JsonResponse(datos)

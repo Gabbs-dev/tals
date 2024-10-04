@@ -2,7 +2,7 @@
 import * as LightsServer from './LightsServer';
 import LightItem from './LightsItem';
 import LightsChart from '../../Charts/LightsChart';
-import DynamicLight from '../Arduino/ard_commands';
+// import DynamicLight from '../Arduino/ard_commands';
 
 const LightsList = () => {
     const [Lights, setLights] = useState([]);
@@ -27,15 +27,16 @@ const LightsList = () => {
             <h1 className='display-5'>Panel de Control / Luminarias</h1>
             <hr className='divider'/>
             <div className="card text-bg-light mx-3 my-3">
-              <div className="card-header">Resumen Global</div>
+                <div className="card-header">Resumen Global</div>
                 <div className="card-body">
                     <LightsChart/>
                 </div>
             </div>
             <hr className='divider'/>
-            <div>
+            {/*}<div>
                 <DynamicLight/>
             </div>
+            {*/}
             <hr className='divider'/>
             <h2 className='display-6 mt-5'>Dispositivos Disponibles</h2>
             <hr className='divider'/>
