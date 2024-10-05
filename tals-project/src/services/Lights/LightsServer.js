@@ -1,6 +1,6 @@
 ﻿const API_URL="http://127.0.0.1:8000/api/lights/";
 
-export const listLights = async () => {
+export const getLastLight = async () => {
     return await fetch(API_URL);
 };
 

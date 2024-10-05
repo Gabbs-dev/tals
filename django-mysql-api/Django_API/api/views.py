@@ -179,11 +179,19 @@ class LuminariaView(View):
                 datos= {'message': "Light not found"}
             return JsonResponse(datos)
         else:
-            lights= list(Luminaria.objects.values())
-            if len(lights)>0:
-                datos= {'message': "Success",'Lights':lights}
+            last_light = Luminaria.objects.order_by('date').last()
+            if last_light:
+                data = {
+                    'id': last_light.id,
+                    'luz1': last_light.luz1,
+                    'luz2': last_light.luz2,
+                    'auto_encendido': last_light.auto_encendido,
+                    'auto_apagado': last_light.auto_apagado,
+                    'date': last_light.date,
+                }
+                datos = {'message': "Success", 'lastLight': data}
             else:
-                datos= {'message': "Lights not found"}
+                datos = {'message': "Data not found"}
             return JsonResponse(datos) 
 
     def post(self, request):
@@ -231,11 +239,18 @@ class RegadoView(View):
                 datos= {'message': "Spray not found"}
             return JsonResponse(datos)
         else:
-            water= list(Regado.objects.values())
-            if len(water)>0:
-                datos= {'message': "Success",'Spray':water}
+            last_spray = Regado.objects.order_by('id').last()
+            if last_spray:
+                data = {
+                    'id': last_spray.id,
+                    'estado': last_spray.estado,
+                    'nivel_humedad': last_spray.nivel_humedad,
+                    'auto_riego_inicio': last_spray.auto_riego_inicio,
+                    'auto_riego_cierre': last_spray.auto_riego_cierre,
+                }
+                datos = {'message': "Success", 'lastSpray': data}
             else:
-                datos= {'message': "Spray not found"}
+                datos = {'message': "Data not found"}
             return JsonResponse(datos) 
 
     def post(self, request):
@@ -328,17 +343,24 @@ class TanqueAguaView(View):
             watertank=list(TanqueAgua.objects.filter(id=id).values())
             if len(watertank) > 0:
                 user=watertank[0]
-                datos = {'message': "Success", 'Water Tank': user}
+                datos = {'message': "Success", 'WaterTank': user}
             else:
                 datos= {'message': "Water Tank not found"}
             return JsonResponse(datos)
         else:
-            watertank= list(TanqueAgua.objects.values())
-            if len(watertank)>0:
-                datos= {'message': "Success",'Water Tank':watertank}
+            last_watertank = TanqueAgua.objects.order_by('date').last()
+            if last_watertank:
+                data = {
+                    'id': last_watertank.id,
+                    'nivel_agua': last_watertank.nivel_agua,
+                    'nivel_max': last_watertank.nivel_max,
+                    'nivel_min': last_watertank.nivel_min,
+                    'date': last_watertank.date,
+                }
+                datos = {'message': "Success", 'Watertank': data}
             else:
-                datos= {'message': "Water Tank not found"}
-            return JsonResponse(datos) 
+                datos = {'message': "Data not found"}
+            return JsonResponse(datos)
 
     def post(self, request):
         jd = json.loads(request.body)

@@ -1,14 +1,59 @@
-﻿const LightItem = ({luminaria, listLights}) => {
+﻿import React, { useEffect, useState } from 'react';
+import * as LightsServer from './LightsServer';
+
+const LightItem = () => {
+    const [Luminaria, setLuminaria] = useState([]);
+
+    const actualState = async () => {
+        try{
+            const res = await LightsServer.getLastLight();
+            const data = await res.json();
+            setLuminaria(data);
+        }catch(error){
+            console.log(error);
+            return null;
+        };
+    };
+    useEffect(() => {
+        actualState();
+        // Actualizar cada 5 segundos (ajusta el intervalo según tus necesidades)
+        const interval = setInterval(actualState, 5000);
+        // Limpiar el intervalo cuando el componente se desmonte
+        return () => clearInterval(interval);
+    }, [] );
+
+    function getEstadoLuz(luz) {
+        switch (luz) {
+            case 0:
+                return 'Apagado';
+            case 1:
+                return 'Encendido';
+            default:
+                return 'N/A';
+        };
+    };
 
     return(
-        <div className="col-md-4 my-3">
-            <div className="card card-body">
-                <h3 className="card-tittle">Luz {luminaria.id} </h3>
-                <p className="card-text my-3">Ubicación: <strong>{luminaria.luz1} </strong></p>
-                <p className="card-text my-3">Ubicación: <strong>{luminaria.luz2} </strong></p>
-                <p className="card-text">Estado: <strong>{luminaria.auto_encendido} </strong></p>
-                <p className="card-text">Estado: <strong>{luminaria.auto_apagado} </strong></p>
-                <p className="card-text">Estado: <strong>{luminaria.date} </strong></p>
+        <div className="d-flex justify-content-evenly">
+            <div className="card card-body md-3">
+                <div className="d-flex justify-conten-between">    
+                    <h3 className="card-tittle">Luz</h3>
+                    <button className="btn btn-outline-warning">Luz</button>
+                </div>
+                <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz1)}</strong></p>
+                <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
+                <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
+                <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
+            </div>
+            <div className="card card-body md-3">
+                <div className="d-flex justify-conten-between">    
+                    <h3 className="card-tittle">Luz</h3>
+                    <button className="btn btn-outline-warning">Luz</button>
+                </div>
+                <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz2)} </strong></p>
+                <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
+                <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
+                <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
             </div>
         </div>
     );

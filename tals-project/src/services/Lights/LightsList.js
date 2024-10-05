@@ -1,26 +1,8 @@
-﻿import React, { useEffect, useState } from 'react';
-import * as LightsServer from './LightsServer';
-import LightItem from './LightsItem';
+﻿import LightItem from './LightsItem';
 import LightsChart from '../../Charts/LightsChart';
 // import DynamicLight from '../Arduino/ard_commands';
 
 const LightsList = () => {
-    const [Lights, setLights] = useState([]);
-
-    const listLights = async () => {
-        try{
-            const res = await LightsServer.listLights();
-            const data = await res.json();
-            console.log(data);
-            setLights(data.Lights);
-        }catch(error){
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        listLights();
-    }, []);
 
     return (
         <div className='row'>
@@ -32,17 +14,9 @@ const LightsList = () => {
                     <LightsChart/>
                 </div>
             </div>
-            <hr className='divider'/>
-            {/*}<div>
-                <DynamicLight/>
-            </div>
-            {*/}
-            <hr className='divider'/>
             <h2 className='display-6 mt-5'>Dispositivos Disponibles</h2>
             <hr className='divider'/>
-            {Lights.map((luminaria)=>(
-                <LightItem key={luminaria.id} luminaria={luminaria} listLights={listLights} />
-            ))}
+            <LightItem />
             <h2 className='display-6 mt-5'>Configuracion</h2>
             <hr className='divider'/>
             <div className="card text-bg-light mx-3 my-3">

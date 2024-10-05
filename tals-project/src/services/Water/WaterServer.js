@@ -1,6 +1,6 @@
 ﻿const API_URL="http://127.0.0.1:8000/api/watertank/";
 
-export const listWatertank = async () => {
+export const getLastWatertank = async () => {
     return await fetch(API_URL);
 };
 

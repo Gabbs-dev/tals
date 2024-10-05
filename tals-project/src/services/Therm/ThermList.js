@@ -1,31 +1,7 @@
-﻿import React, { useEffect, useState } from 'react';
-import ThermostatItem from './ThermostatItem';
+﻿import ThermostatItem from './ThermostatItem';
 import TempCharts from '../../Charts/TempChart';
-import * as ThermServer from './ThermServer';
 
 const ThermList = () => {
-    const [Termostato, setTermostato] = useState([]);
-
-    const actualState = async () => {
-        try{
-            const res = await ThermServer.getLastThermostat();
-            const data = res.json();
-            console.log(data);
-            setTermostato(data.Termostato);
-        }catch(error){
-            console.log(error);
-            return null;
-        }
-    };
-
-    useEffect(() => {
-        actualState();
-        // Actualizar cada 5 segundos (ajusta el intervalo según tus necesidades)
-        const interval = setInterval(actualState, 5000);
-        // Limpiar el intervalo cuando el componente se desmonte
-        return () => clearInterval(interval);
-    }, [] );
-
     return (
         <div className='row'>
             <h1 className='display-5'>Panel de Control / Temperatura</h1>
@@ -38,9 +14,7 @@ const ThermList = () => {
             </div>
             <h2 className='display-6 mt-5'>Dispositivos Activos</h2>
             <hr className='divider'/>
-            {Termostato.map((termostato)=>(
-                <ThermostatItem key={termostato.id} termostato={termostato} actualState={actualState} />
-            ))} 
+            <ThermostatItem />
             <h2 className='display-6 mt-5'>Configuracion</h2>
             <hr className='divider'/>
             <div className="card text-bg-light mx-3 my-3">

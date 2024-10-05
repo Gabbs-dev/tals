@@ -1,25 +1,7 @@
-﻿import React, { useEffect, useState } from 'react';
-import * as SprayServer from './SprayServer';
-import SprayItem from './SprayItem';
+﻿import SprayItem from './SprayItem';
 import WaterChart from '../../Charts/WaterChart';
 
 const SprayList = () => {
-    const [Spray, setSpray] = useState([]);
-
-    const listSpray = async () => {
-        try{
-            const res = await SprayServer.listSpray();
-            const data = await res.json();
-            console.log(data);
-            setSpray(data.Spray);
-        }catch(error){
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        listSpray();
-    }, []);
 
     return (
         <div className='row'>
@@ -33,9 +15,7 @@ const SprayList = () => {
             </div>
             <h2 className='display-6 mt-5'>Dispositivos Activos</h2>
             <hr className='divider'/>
-            {Spray.map((regado)=>(
-                <SprayItem key={regado.id} regado={regado} listSpray={listSpray} />
-            ))}
+            <SprayItem/>
             <h2 className='display-6 mt-5'>Configuración</h2>
             <hr className='divider'/>
             <div className="card text-bg-light mx-3 my-3">

@@ -1,26 +1,35 @@
-﻿import React, { useState } from "react";
-import { useNavigate } from "react-router";
-//import * as WTServer from './WaterServer';
+﻿import * as WTServer from './WaterServer';
+import React, { useEffect, useState } from 'react';
 
+const WTItem = () => {
+    const [TanqueAgua, setTanqueAgua] = useState([]);
 
-const WTItem = ({tanque_agua, listWatertank}) => {
-    const navigate = useNavigate();
-
-    const handleDelete = async (WTID) =>{
-        //console.log(ThermID);
-        //await ThermServer.deleteUser(ThermID);
-        listWatertank();
+    const actualState = async () => {
+        try{
+            const res = await WTServer.getLastWatertank();
+            const data = await res.json();
+            setTanqueAgua(data);
+        }catch(error){
+            console.log(error);
+            return null;
+        };
     };
+    useEffect(() => {
+        actualState();
+        // Actualizar cada 5 segundos (ajusta el intervalo según tus necesidades)
+        const interval = setInterval(actualState, 5000);
+        // Limpiar el intervalo cuando el componente se desmonte
+        return () => clearInterval(interval);
+    }, [] );
 
     return(
         <div className="col-md-4 my-3">
             <div className="card card-body">
-                <h3 className="card-tittle">Tanque de agua {tanque_agua.id}</h3>
-                <p className="card-text my-3">Nivel Actual de Agua: <strong>{tanque_agua.nivel_agua} Lts </strong></p>
-                <p className="card-text">Nivel Máximo: <strong>{tanque_agua.nivel_max} Lts</strong></p>
-                <p className="card-text">Nivel Minimo: <strong>{tanque_agua.nivel_min} Lts</strong></p>
-                <p className="card-text">Fecha: <strong>{tanque_agua.date} Lts</strong></p>
-                {/*}<button onClick={()=>tanque_agua.id && handleDelete(tanque_agua.id)} className="btn btn-danger my-2">Eliminar</button>{*/}
+                <h3 className="card-tittle">Tanque de agua {TanqueAgua?.Watertank?.id || 'N/A'}</h3>
+                <p className="card-text my-3">Nivel Actual de Agua: <strong>{TanqueAgua?.Watertank?.nivel_agua || 'N/A'} Lts </strong></p>
+                <p className="card-text">Nivel Máximo: <strong>{TanqueAgua?.Watertank?.nivel_max || 'N/A'} Lts</strong></p>
+                <p className="card-text">Nivel Minimo: <strong>{TanqueAgua?.Watertank?.nivel_min || 'N/A'} Lts</strong></p>
+                <p className="card-text">Fecha: <strong>{TanqueAgua?.Watertank?.date || 'N/A'} Lts</strong></p>
             </div>
         </div>
     );
