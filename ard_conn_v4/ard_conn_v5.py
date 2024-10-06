@@ -15,7 +15,6 @@ mydb = mysql.connector.connect(
   database="tals"
 )
 
-
 # Funcion para conectar el socket
 async def puerto_socket(): 
   # Socket para recibir datos de React

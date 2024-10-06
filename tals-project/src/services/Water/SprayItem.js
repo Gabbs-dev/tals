@@ -24,14 +24,17 @@ const SprayItem = () => {
     }, [] );
 
     return(
-        <div className="col-md-4 my-3">
-            <div className="card card-body">
-                <h3 className="card-tittle">Jardín {Spray?.lastSpray?.id || 'N/A'} </h3>
-                <p className="card-text my-3">Estado: <strong>{Spray?.lastSpray?.estado || 'N/A'} </strong></p>
-                <p className="card-text">Humedad del Suelo: <strong>{Spray?.lastSpray?.nivel_humedad || 'N/A'} % </strong></p>
-                <p className="card-text">Inicio de Regado Automatico: <strong>{Spray?.lastSpray?.auto_riego_inicio || 'N/A'} </strong></p>
-                <p className="card-text">Cierre de Regado Automatico: <strong>{Spray?.lastSpray?.auto_riego_cierre || 'N/A'} </strong></p>
+        <div className="d-flex flex-row mb-3 justify-content-evenly">
+            <div className="d-flex flex-column">
+                <div className="card card-body">
+                    <h3 className="card-tittle">Jardín</h3>
+                    <p className="card-text my-3">Estado: <strong>{Spray?.lastSpray?.estado || 'N/A'} </strong></p>
+                    <p className="card-text">Humedad del Suelo: <strong>{Spray?.lastSpray?.nivel_humedad || 'N/A'} % </strong></p>
+                    <p className="card-text">Inicio de Regado Automatico: <strong>{Spray?.lastSpray?.auto_riego_inicio || 'N/A'} </strong></p>
+                    <p className="card-text">Cierre de Regado Automatico: <strong>{Spray?.lastSpray?.auto_riego_cierre || 'N/A'} </strong></p>
+                </div>
             </div>
+            
         </div>
     );
 };

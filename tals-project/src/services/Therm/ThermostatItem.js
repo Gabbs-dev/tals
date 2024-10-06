@@ -23,13 +23,15 @@ const ThermostatItem = () => {
     }, [] );
     
     return (
-        <div className="col-md-4 my-3">
-            <div className="card card-body">
-                <h3 className="card-tittle">Termómetro: {Termostato?.Thermostat?.id || 'N/A'} </h3>
-                <p className="card-text my-3">Temperatura Actual: <strong> {Termostato?.Thermostat?.temperatura || 'N/A'} ºC </strong></p>
-                <p className="card-text">Humedad Actual: <strong>{Termostato?.Thermostat?.humedad || 'N/A'} % </strong></p>
-                <p className="card-text">Temperatura Deseada: <strong>{Termostato?.Thermostat?.temperatura_deseada || 'N/A'} ºC </strong></p>
-                <p className="card-text">Fecha: <strong>{Termostato?.Thermostat?.date || 'N/A'}</strong></p>
+        <div className="d-flex flex-row mb-3 justify-content-evenly">
+            <div className='d-flex flex-column'>
+                <div className="card card-body">
+                    <h3 className="card-tittle">Termómetro:</h3>
+                    <p className="card-text my-3">Temperatura Actual: <strong> {Termostato?.Thermostat?.temperatura || 'N/A'} ºC </strong></p>
+                    <p className="card-text">Humedad Actual: <strong>{Termostato?.Thermostat?.humedad || 'N/A'} % </strong></p>
+                    <p className="card-text">Temperatura Deseada: <strong>{Termostato?.Thermostat?.temperatura_deseada || 'N/A'} ºC </strong></p>
+                    <p className="card-text">Fecha: <strong>{Termostato?.Thermostat?.date || 'N/A'}</strong></p>
+                </div>
             </div>
         </div>
     );
