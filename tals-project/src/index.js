@@ -9,7 +9,8 @@ import Dashboard from './Dashboard';
 import UsersList from './users/UsersList';
 import UsersForm from './users/UsersForm';
 import LightsList from './services/Lights/LightsList';
-import LightsForm from './services/Lights/LightsForm';
+//import LightsForm from './services/Lights/LightsForm';
+//import LightItem from './services/Lights/LightsItem';
 import WTList from './services/Water/WaterList';
 import WTForm from './services/Water/WaterForm';
 import ThermList from './services/Therm/ThermList';
@@ -34,8 +35,8 @@ root.render(
                 <Route path='/users/register' Component={UsersForm} />
                 <Route path='/users/update/:id' Component={UsersForm} />
                 <Route path='/lights' Component={LightsList} />
-                <Route path='/lights/register' Component={LightsForm} />
-                <Route path='/lights/update/:id' Component={LightsForm} />
+                {/*}<Route path='/lights/register' Component={LightItem} />{*/}
+                {/*}<Route path='/lights/update/:id' Component={LightsForm} />{*/}
                 <Route path='/water' Component={WTList} />
                 <Route path='/water/register' Component={WTForm} />
                 <Route path='/water/update/:id' Component={WTForm} />

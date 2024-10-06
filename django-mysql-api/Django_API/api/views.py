@@ -179,7 +179,7 @@ class LuminariaView(View):
                 datos= {'message': "Light not found"}
             return JsonResponse(datos)
         else:
-            last_light = Luminaria.objects.order_by('date').last()
+            last_light = Luminaria.objects.order_by('id').last()
             if last_light:
                 data = {
                     'id': last_light.id,
@@ -196,7 +196,7 @@ class LuminariaView(View):
 
     def post(self, request):
         jd = json.loads(request.body)
-        Luminaria.objects.create(ubicacion=jd['ubicacion'],estado=jd['estado'],auto_encendido=jd['auto_encendido'],auto_apagado=jd['auto_apagado'])
+        Luminaria.objects.create(luz1=jd['luz1'],luz2=jd['luz2'],date=jd['date'])
         datos= {'message': "Success"}
         return JsonResponse(datos)
 
