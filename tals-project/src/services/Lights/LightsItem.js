@@ -33,13 +33,19 @@ const LightItem = () => {
         };
     };
 
+    const handleClick = async () => {
+        
+    };
+
     return(
         <div className="d-flex flex-row mb-3 justify-content-evenly">
             <div className='d-flex flex-column'>
                 <div className="card card-body">
                     <div className="d-inline-flex justify-content-between">    
                         <h3 className="card-tittle">Luz</h3>
-                        <a type="button" className="btn btn-outline-warning" href='#'><i className="bi bi-lightbulb" /></a>
+                        {Luminaria?.lastLight.luz1 === 0 ? 
+                        <a type="button" className="btn btn-outline-warning" value='1' onClick={handleClick}><i className="bi bi-lightbulb" /></a> :
+                        <a type="button" className="btn btn-outline-warning" value='0' onClick={handleClick}><i className="bi bi-lightbulb" /></a> }
                     </div>
                     <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz1)}</strong></p>
                     <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>

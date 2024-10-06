@@ -22,7 +22,6 @@ const LightForm = () => {
             let res;
             res= await LightsServer.registerLight(Lights);
             const data= await res.json();
-            //console.log(data);
             if(data.message==="Success"){
                 setLights(initialState);
             }
