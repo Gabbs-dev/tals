@@ -36,11 +36,9 @@ export const createLightState = async (data) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            "luz1":Number(data.luz1),
+            //data
+            "luz1":Number(data.luz1), 
             "luz2":Number(data.luz2),
-            "auto_encendio":data.auto_encendido,
-            "auto_apagado":data.auto_apagado,
-            "date":data.date,
         })
     });
-};
+};          

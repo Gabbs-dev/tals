@@ -20,30 +20,6 @@ sem = threading.Semaphore(1)
 last_luz1 = None
 last_luz2 = None
 
-# Extrae el último registro de las tablas solicitadas y lo envía al Arduino.
-async def bd_to_ard():
-  global last_luz1, last_luz2
-  while True:
-    with sem:  # Adquiere el semáforo
-      try:
-        mycursor = mydb.cursor()
-        sql = "SELECT luz1, luz2 FROM luminaria ORDER BY id DESC LIMIT 1"  # Ordenamos por ID descendiente y limitamos a 1 resultado
-        mycursor.execute(sql)
-        result = mycursor.fetchone()
-        if result:
-          luz1, luz2 = result
-          if luz1 != last_luz1 or luz2 != last_luz2:
-            comando = f"{luz1},{luz2},0,0\n"
-            command_queue.put(comando)
-            print(f"Dato enviado al Arduino: {comando}")
-            last_luz1, last_luz2 = luz1, luz2
-        else:
-          print("No se encontraron datos en la tabla luminaria")
-      except mysql.connector.Error as err:
-        print(f"Error al extraer datos de la base de datos: {err}")
-      await asyncio.sleep(2)
-
-
 # Funciones para insertar datos en la base de datos
 async def insertar_na(nivel_agua):
   try:
@@ -89,10 +65,9 @@ async def insertar_luz(luz1,luz2):
   except mysql.connector.Error as err:
     print(f"Error al insertar datos en la base de datos: {err}")
 
-
+'''
 # Cola de peticiones
 command_queue = Queue(5)
-
 
 # Funciones de comunicaion Arduino-Python
 async def enviar_comando():
@@ -108,6 +83,29 @@ async def enviar_comando():
       # Esperar un segundo si no hay comandos por enviar
       await asyncio.sleep(1)
 
+# Extrae el último registro de las tablas solicitadas y lo envía al Arduino.
+ async def bd_to_ard():
+  global last_luz1, last_luz2
+  while True:
+    with sem:  # Adquiere el semáforo
+      try:
+        mycursor = mydb.cursor()
+        sql = "SELECT luz1, luz2 FROM luminaria ORDER BY id DESC LIMIT 1"  # Ordenamos por ID descendiente y limitamos a 1 resultado
+        mycursor.execute(sql)
+        result = mycursor.fetchone()
+        if result:
+          luz1, luz2 = result
+          if luz1 != last_luz1 or luz2 != last_luz2:
+            comando = f"{luz1},{luz2},0,0\n"
+            command_queue.put(comando)
+            print(f"Dato enviado al Arduino: {comando}")
+            last_luz1, last_luz2 = luz1, luz2
+        else:
+          print("No se encontraron datos en la tabla luminaria")
+      except mysql.connector.Error as err:
+        print(f"Error al extraer datos de la base de datos: {err}")
+      await asyncio.sleep(2)    
+'''
 # Recibir datos de arduino a traves del puerto virtual de comunicacion "COM2"
 async def recibir_y_guardar_datos():
   ser = serial.Serial('COM2',9600)
@@ -130,7 +128,7 @@ async def recibir_y_guardar_datos():
         await insertar_luz(luz1,luz2)
       except (serial.SerialException, json.JSONDecodeError, mysql.connector.Error) as e:
         print(f"Error: {e}")
-      await asyncio.sleep(10)
+      await asyncio.sleep(2)
     else:
       # Esperar un segundo si existe algun error en la lectura o envio de los datos
       print("Error: Error al leer o enviar los datos")
@@ -138,10 +136,6 @@ async def recibir_y_guardar_datos():
 
 # Main
 async def main():
-  task_bd = asyncio.create_task(bd_to_ard()) # Agregar tarea para leer la bd en espera de nuevas instrucciones
-  task_s = asyncio.create_task(enviar_comando())  # Agregar tarea para enviar comandos
-  #task_r = asyncio.create_task(recibir_y_guardar_datos()) # Agregar tarea para recibir datos y enviarlos a la bd
-  while True:
-    await asyncio.gather(task_bd,task_s)
+  await recibir_y_guardar_datos()
 
 asyncio.run(main())

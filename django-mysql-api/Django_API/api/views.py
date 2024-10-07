@@ -2,6 +2,7 @@ from django.http.response import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
+import serial 
 from .models import *
 import json
 
@@ -196,24 +197,33 @@ class LuminariaView(View):
 
     def post(self, request):
         jd = json.loads(request.body)
-        Luminaria.objects.create(luz1=jd['luz1'],luz2=jd['luz2'],date=jd['date'])
-        datos= {'message': "Success"}
-        return JsonResponse(datos)
+        # Obtener los valores de luz1 y luz2 con valores por defecto
+        luz1 = jd.get('luz1', 0)  # Si no se encuentra 'luz1', se asigna 0
+        luz2 = jd.get('luz2', 0)  # Si no se encuentra 'luz2', se asigna 0
+        # Construir el comando
+        comando = f"{luz1},{luz2},{0},{0}\n"
+        with serial.Serial('COM1', 9600) as ser:
+            command = ser.write(comando.encode('utf-8'))
+            if command:
+                datos = {'message': "Success"}
+            else:
+                datos = {'message': "error"}
+            return JsonResponse(datos)
 
-    def put(self, request, id):
-        jd = json.loads(request.body)
-        lights= list(Luminaria.objects.filter(id=id).values())
-        if len(lights) > 0:
-            light= Luminaria.objects.get(id=id)
-            light.ubicacion= jd['ubicacion']
-            light.estado= jd['estado']
-            light.auto_encendido=jd['auto_encendido']
-            light.auto_apagado=jd['auto_apagado']
-            light.save()
-            datos= {'message': "Success"}
-        else:
-            datos= {'message': "Light not found"}
-        return JsonResponse(datos)
+        def put(self, request, id):
+            jd = json.loads(request.body)
+            lights= list(Luminaria.objects.filter(id=id).values())
+            if len(lights) > 0:
+                light= Luminaria.objects.get(id=id)
+                light.ubicacion= jd['ubicacion']
+                light.estado= jd['estado']
+                light.auto_encendido=jd['auto_encendido']
+                light.auto_apagado=jd['auto_apagado']
+                light.save()
+                datos= {'message': "Success"}
+            else:
+                datos= {'message': "Light not found"}
+            return JsonResponse(datos)
 
     def delete(self, request, id):
         lights= list(Luminaria.objects.filter(id=id).values())
