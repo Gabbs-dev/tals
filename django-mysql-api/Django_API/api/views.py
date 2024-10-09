@@ -1125,3 +1125,107 @@ class TermostatoHasEventoView(View):
         else:
             datos= {'message': "Thermostat Event not found"}
         return JsonResponse(datos)
+
+
+class TanqueaguaNivelesView(View): 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs) :
+        return super().dispatch(request, *args, **kwargs)
+    
+    
+    def get(self, request, id=0):
+        if(id>0):
+            events=list(TanqueAguaNiveles.objects.filter(id=id).values())
+            if len(events) > 0:
+                event=events[0]
+                datos = {'message': "Success", 'tanklevel': event}
+            else:
+                datos= {'message': "tanklevel not found"}
+            return JsonResponse(datos)
+        else:
+            events= list(TanqueAguaNiveles.objects.values())
+            if len(events)>0:
+                datos= {'message': "Success",'tanklevel':events}
+            else:
+                datos= {'message': "tanklevel not found"}
+            return JsonResponse(datos) 
+
+    def post(self, request):
+        jd = json.loads(request.body)
+        TanqueAguaNiveles.objects.create(nivel_maximo=jd['nivel_maximo'],nivel_minimo=jd['nivel_minimo'])
+        datos= {'message': "Success"}
+        return JsonResponse(datos)
+
+    def put(self, request, id):
+        jd = json.loads(request.body)
+        events= list(TanqueAguaNiveles.objects.filter(id=id).values())
+        if len(events) > 0:
+            event= TanqueAguaNiveles.objects.get(id=id)
+            event.nivel_maximo= jd['nivel_maximo']
+            event.nivel_minimo= jd['nivel_minimo']
+            event.save()
+            datos= {'message': "Success"}
+        else:
+            datos= {'message': "Tanklevel not found"}
+        return JsonResponse(datos)
+
+    def delete(self, request, id):
+        events= list(TanqueAguaNiveles.objects.filter(id=id).values())
+        if len(events) > 0:
+            TanqueAguaNiveles.objects.filter(id=id).delete()
+            datos= {'message': "Success"}
+        else:
+            datos= {'message': "tanklevel not found"}
+        return JsonResponse(datos)
+
+
+class TemporizadorView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs) :
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, id=0):
+        if(id>0):
+            events=list(Temporizador.objects.filter(id=id).values())
+            if len(events) > 0:
+                event=events[0]
+                datos = {'message': "Success", 'timer': event}
+            else:
+                datos= {'message': "timer not found"}
+            return JsonResponse(datos)
+        else:
+            events= list(Temporizador.objects.values())
+            if len(events)>0:
+                datos= {'message': "Success",'timer':events}
+            else:
+                datos= {'message': "timer not found"}
+            return JsonResponse(datos) 
+
+    def post(self, request):
+        jd = json.loads(request.body)
+        TanqueAguaNiveles.objects.create(dispositivo=jd['dispositivo'],fecha_inicio=jd['fecha_inicio'],fecha_cierre=jd['fecha_cierre'])
+        datos= {'message': "Success"}
+        return JsonResponse(datos)
+
+    def put(self, request, id):
+        jd = json.loads(request.body)
+        events= list(Temporizador.objects.filter(id=id).values())
+        if len(events) > 0:
+            event= TanqueAguaNiveles.objects.get(id=id)
+            event.dispositivo= jd['dispositivo']
+            event.fecha_inicio= jd['fecha_inicio']
+            event.fecha_cierre= jd['fecha_cierre']
+            event.save()
+            datos= {'message': "Success"}
+        else:
+            datos= {'message': "Timer not found"}
+        return JsonResponse(datos)
+
+    def delete(self, request, id):
+        events= list(Temporizador.objects.filter(id=id).values())
+        if len(events) > 0:
+            Temporizador.objects.filter(id=id).delete()
+            datos= {'message': "Success"}
+        else:
+            datos= {'message': "timer not found"}
+        return JsonResponse(datos)

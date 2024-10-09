@@ -43,8 +43,6 @@ class Evento(models.Model):
 class Luminaria(models.Model):
     luz1 = models.IntegerField(blank=True, null=True)
     luz2 = models.IntegerField(blank=True, null=True)
-    auto_encendido = models.TimeField(blank=True, null=True)
-    auto_apagado = models.TimeField(blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
@@ -198,6 +196,25 @@ class TanqueAguaHasEvento(models.Model):
         managed = False
         db_table = 'tanque_agua_has_evento'
         unique_together = (('id', 'tanque_agua', 'evento'),)
+
+
+class TanqueAguaNiveles(models.Model):
+    nivel_maximo = models.IntegerField()
+    nivel_minimo = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'tanque_agua_niveles'
+
+
+class Temporizador(models.Model):
+    dispositivo = models.CharField(max_length=50, blank=True, null=True)
+    fecha_inicio = models.TimeField(blank=True, null=True)
+    fecha_cierre = models.TimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'temporizador'
 
 
 class Termostato(models.Model):

@@ -16,6 +16,8 @@ urlpatterns = [
     path('mSensors/<int:id>',SensorMovimientoView.as_view(), name='msensor_process'),
     path('watertank/',TanqueAguaView.as_view(), name='watertank_list'),
     path('watertank/<int:id>',TanqueAguaView.as_view(), name='watertank_process'),
+    path('watertank/levels/',TanqueaguaNivelesView.as_view(), name='watertanklevels_list'),
+    path('watertank/levels/<int:id>',TanqueaguaNivelesView.as_view(), name='watertanklevels_process'),
     path('thermostat/',TermostatoView.as_view(), name='thermostat_list'),
     path('thermostat/<int:id>',TermostatoView.as_view(), name='thermostat_process'),
     path('events/',EventoView.as_view(), name='events_list'),
@@ -46,5 +48,5 @@ urlpatterns = [
     path('watertankevents/<int:id>',TanqueAguaHasEventoView.as_view(), name='watertankevent_process'),
     path('thermostatevents/',TermostatoHasEventoView.as_view(), name='thermostatevents_list'),
     path('thermostatevents/<int:id>',TermostatoHasEventoView.as_view(), name='thermostatevent_process'),
-    #path('ard_commands/',ComandosArduinoView.as_view(), name='ard_commands'),
+    path('timer/<int:id>',TemporizadorView.as_view(), name='temporizador_list'),
 ]
