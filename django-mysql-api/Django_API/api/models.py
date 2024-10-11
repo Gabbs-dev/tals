@@ -179,8 +179,6 @@ class SensorMovimientoHasEvento(models.Model):
 
 class TanqueAgua(models.Model):
     nivel_agua = models.IntegerField(blank=True, null=True)
-    nivel_max = models.IntegerField(blank=True, null=True)
-    nivel_min = models.IntegerField(blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
@@ -201,6 +199,8 @@ class TanqueAguaHasEvento(models.Model):
 class TanqueAguaNiveles(models.Model):
     nivel_maximo = models.IntegerField()
     nivel_minimo = models.IntegerField()
+    altura = models.FloatField()
+    diametro = models.FloatField() 
 
     class Meta:
         managed = False
