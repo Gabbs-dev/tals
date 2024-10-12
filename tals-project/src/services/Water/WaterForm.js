@@ -9,22 +9,21 @@ const WTForm = () => {
     const navigate = useNavigate();
     const params = useParams();
 
-    const initialState={id:0,nivel_agua:"0",nivel_max:"0.0",nivel_min:"0.0",date:""};
-    const [WaterTank, setWT]= useState(initialState);
+    const initialState={id:0, nivel_maximo:"00",nivel_minimo:"00",altura:"0.0",diametro:"0.0"};
+    const [WaterTankLevels, setWTL]= useState(initialState);
 
     const HandleInputChange = (e) =>{
-        setWT({...WaterTank,[e.target.name]:e.target.value});
+        setWTL({...WaterTankLevels,[e.target.name]:e.target.value});
     };
 
     const HandleSubmit = async (e) =>{
         e.preventDefault();
         try{
             let res;
-            res= await WaterServer.registerWatertank(WaterTank);
+            res= await WaterServer.registerWatertankLevels(WaterTankLevels);
             const data= await res.json();
-            //console.log(data);
             if(data.message==="Success"){
-                setWT(initialState);
+                setWTL(initialState);
             }
             navigate('/water');
         }catch(error){
@@ -32,47 +31,54 @@ const WTForm = () => {
         };
     };
 
-    const getWaterTank = async (WTID) =>{
+    const getWaterTanklevel = async (WTID) =>{
         try{
-            const res = await WaterServer.getWatertank(WTID);
+            const res = await WaterServer.getWatertankLevel(WTID);
             const data = await res.json();
-            const {nivel_agua,nivel_max,nivel_min,date}= data.WaterTank;
-            setWT({nivel_agua,nivel_max,nivel_min,date});
+            const {nivel_maximo,nivel_minimo,altura,diametro} = data.WaterTankLevels;
+            setWTL((prevState) => ({...prevState, nivel_maximo,nivel_minimo,altura,diametro,}));
         }catch(error){
             console.log(error);
         }
     };
     useEffect(() => {
         if(params.id){
-            getWaterTank(params.id);
+            getWaterTanklevel(params.id);
         }
         // eslint-disable-next-line
     }, []);
 
     return(
-        <div className="col-md-3 mx-auto">
-            <h2 className="mb-3 text-center">Ingrese Nuevo Dispositivo</h2>
-            <h4 className="mb-3 text-center">Control del Nivel de Agua</h4>
-            <form onSubmit={HandleSubmit}>
-                <div className="mb-3">
-                    <input type="hidden" step="0.1" name="nivel_agua" value={WaterTank.nivel_agua} onChange={HandleInputChange} className="form-control" />
+        <div className="row">
+            <h2 className="display-5 text-center">Nivel de Agua / Configuracion</h2>
+            <hr className="divider"/>
+            <div className="d-flex flex-row justify-content-center">
+                <div className="d-flex flex-column">
+                    <form onSubmit={HandleSubmit}>
+                        <div className="mb-3">
+                            <label className="form-label">Nivel Máximo (%):</label>
+                            <input type="number" name="nivel_maximo" value={WaterTankLevels?.tanklevel?.nivel_maximo} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Nivel Mínimo (%):</label>
+                            <input type="number" name="nivel_minimo" value={WaterTankLevels.nivel_minimo} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Altura (mts):</label>
+                            <input type="number" step="0.1" name="altura" value={WaterTankLevels.altura} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Diámetro (mts):</label>
+                            <input type="number" step="0.1" name="diametro" value={WaterTankLevels.diametro} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="d-flex justify-content-evenly">
+                            <button type="submit" className="btn btn-primary">Submit</button>
+                            <a type="button" className="btn btn-secondary" href="/water">Return</a>
+                        </div>
+                    </form>
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Nivel Máximo:</label>
-                    <input type="number" step="0.1" name="nivel_max" value={WaterTank.nivel_max} onChange={HandleInputChange} className="form-control" required />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Nivel Mínimo:</label>
-                    <input type="number" step="0.1" name="nivel_min" value={WaterTank.nivel_min} onChange={HandleInputChange} className="form-control" required />
-                </div>
-                <div className="mb-3">
-                    <input type="hidden" name="date" value={WaterTank.date} onChange={HandleInputChange} className="form-control" />
-                </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
-                <a type="button" className="btn btn-secondary mx-3" href="/addDevices">Return</a>
-            </form>
+            </div>
         </div>
-        
     )
 };
 

@@ -186,8 +186,10 @@ class LuminariaView(View):
                     'id': last_light.id,
                     'luz1': last_light.luz1,
                     'luz2': last_light.luz2,
-                    'auto_encendido': last_light.auto_encendido,
-                    'auto_apagado': last_light.auto_apagado,
+                    'luz3': last_light.luz3,
+                    'luz4': last_light.luz4,
+                    'luz5': last_light.luz5,
+                    'luz6': last_light.luz6,
                     'date': last_light.date,
                 }
                 datos = {'message': "Success", 'lastLight': data}
@@ -196,19 +198,49 @@ class LuminariaView(View):
             return JsonResponse(datos) 
 
     def post(self, request):
+        # Obtener los valores de las luces
         jd = json.loads(request.body)
-        # Obtener los valores de luz1 y luz2 con valores por defecto
-        luz1 = jd.get('luz1', 0)  # Si no se encuentra 'luz1', se asigna 0
-        luz2 = jd.get('luz2', 0)  # Si no se encuentra 'luz2', se asigna 0
-        # Construir el comando
-        comando = f"{luz1},{luz2},{0},{0}\n"
+        luz1 = jd.get('luz1')
+        luz2 = jd.get('luz2')
+        luz3 = jd.get('luz3')
+        luz4 = jd.get('luz4')
+        luz5 = jd.get('luz5')
+        luz6 = jd.get('luz6')
         with serial.Serial('COM1', 9600) as ser:
-            command = ser.write(comando.encode('utf-8'))
-            if command:
-                datos = {'message': "Success"}
-            else:
-                datos = {'message': "error"}
-            return JsonResponse(datos)
+            data = ser.readline().decode('utf-8').strip()
+            if data:
+                # Convertir el string JSON a un diccionario
+                jd = json.loads(data)
+                rluz1 = jd['estado_rele']
+                rluz2 = jd['estado_rele2']
+                rluz3 = jd['estado_rele3']
+                rluz4 = jd['estado_rele4']
+                rluz5 = jd['estado_rele5']
+                rluz6 = jd['estado_rele6']
+                # Construir el comando
+                comando = ""
+                if luz1 != rluz1:
+                    comando += f"{luz1},"
+                elif luz2 != rluz2:
+                    comando += f"{luz2},"
+                elif luz3 != rluz3:
+                    comando += f"{luz3},"
+                elif luz4 != rluz4:
+                    comando += f"{luz4},"
+                elif luz5 != rluz5:
+                    comando += f"{luz5},"
+                elif luz6 != rluz6:
+                    comando += f"{luz6},"
+                comando += f"{0},{90}"
+                # Enviar comando sólo si hay cambios '0,0,0,0,0,0,0,90'
+                if comando:
+                    comando += "\n"
+                    command = ser.write(comando.encode('utf-8'))
+                    if command:
+                        datos = {'message': "Success"}
+                    else:
+                        datos = {'message': "error"}
+                    return JsonResponse(datos)
 
         def put(self, request, id):
             jd = json.loads(request.body)
@@ -1132,7 +1164,6 @@ class TanqueaguaNivelesView(View):
     def dispatch(self, request, *args, **kwargs) :
         return super().dispatch(request, *args, **kwargs)
     
-    
     def get(self, request, id=0):
         if(id>0):
             events=list(TanqueAguaNiveles.objects.filter(id=id).values())
@@ -1152,7 +1183,7 @@ class TanqueaguaNivelesView(View):
 
     def post(self, request):
         jd = json.loads(request.body)
-        TanqueAguaNiveles.objects.create(nivel_maximo=jd['nivel_maximo'],nivel_minimo=jd['nivel_minimo'])
+        TanqueAguaNiveles.objects.create(nivel_maximo=jd['nivel_maximo'],nivel_minimo=jd['nivel_minimo'],altura=jd['altura'],diametro=jd['diametro'])
         datos= {'message': "Success"}
         return JsonResponse(datos)
 

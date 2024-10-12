@@ -24,7 +24,7 @@ export const registerLight = async (newLight) => {
 };
 
 export const deleteLight = async (LightID) => {
-    return await fetch(`$0{API_URL}${LightID}`, {
+    return await fetch(`${API_URL}${LightID}`, {
         method: 'DELETE',
     });
 };
@@ -36,9 +36,12 @@ export const createLightState = async (data) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            //data
-            "luz1":Number(data.luz1), 
+            "luz1":Number(data.luz1),
             "luz2":Number(data.luz2),
+            "luz3":Number(data.luz3),
+            "luz4":Number(data.luz4),
+            "luz5":Number(data.luz5),
+            "luz6":Number(data.luz6),
         })
-    });
-};          
+    }); console.log(data);
+};

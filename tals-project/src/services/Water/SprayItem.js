@@ -34,7 +34,6 @@ const SprayItem = () => {
                     <p className="card-text">Cierre de Regado Automatico: <strong>{Spray?.lastSpray?.auto_riego_cierre || 'N/A'} </strong></p>
                 </div>
             </div>
-            
         </div>
     );
 };

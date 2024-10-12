@@ -43,6 +43,10 @@ class Evento(models.Model):
 class Luminaria(models.Model):
     luz1 = models.IntegerField(blank=True, null=True)
     luz2 = models.IntegerField(blank=True, null=True)
+    luz3 = models.IntegerField(blank=True, null=True)
+    luz4 = models.IntegerField(blank=True, null=True)
+    luz5 = models.IntegerField(blank=True, null=True)
+    luz6 = models.IntegerField(blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
 
     class Meta:

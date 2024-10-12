@@ -9,13 +9,13 @@ import Dashboard from './Dashboard';
 import UsersList from './users/UsersList';
 import UsersForm from './users/UsersForm';
 import LightsList from './services/Lights/LightsList';
-//import LightsForm from './services/Lights/LightsForm';
-//import LightItem from './services/Lights/LightsItem';
+import LightsForm from './services/Lights/LightsForm';
 import WTList from './services/Water/WaterList';
 import WTForm from './services/Water/WaterForm';
 import ThermList from './services/Therm/ThermList';
 import ThermForm from './services/Therm/ThermForm';
 import DevicesList from './services/Devices';
+import SprayForm from './services/Water/SprayForm';
 
 //externals
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -35,14 +35,16 @@ root.render(
                 <Route path='/users/register' Component={UsersForm} />
                 <Route path='/users/update/:id' Component={UsersForm} />
                 <Route path='/lights' Component={LightsList} />
-                {/*}<Route path='/lights/register' Component={LightItem} />{*/}
-                {/*}<Route path='/lights/update/:id' Component={LightsForm} />{*/}
+                <Route path='/lights/config' Component={LightsForm} />
+                <Route path='/lights/config/:id' Component={LightsForm} />
                 <Route path='/water' Component={WTList} />
-                <Route path='/water/register' Component={WTForm} />
-                <Route path='/water/update/:id' Component={WTForm} />
+                <Route path='/water/tanklevelconfig' Component={WTForm} />
+                <Route path='/water/tanklevelconfig/:id' Component={WTForm} />
+                <Route path='/water/sprayconfig' Component={SprayForm} />
+                <Route path='/water/sprayconfig/:id' Component={SprayForm} />
                 <Route path='/thermostat' Component={ThermList} />
-                <Route path='/thermostat/register' Component={ThermForm} />
-                <Route path='/thermostat/update/:id' Component={ThermForm} />
+                <Route path='/thermostat/config' Component={ThermForm} />
+                <Route path='/thermostat/config/:id' Component={ThermForm} />
             </Routes>
         </div>
     </BrowserRouter>

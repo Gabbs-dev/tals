@@ -4,23 +4,27 @@ import TempCharts from '../../Charts/TempChart';
 const ThermList = () => {
     return (
         <div className='row'>
-            <h1 className='display-5'>Panel de Control / Temperatura</h1>
+            <h1 className='display-4 text-center'>Panel de Control / Temperatura</h1>
             <hr className='divider'/>
-            <div className="card text-bg-light mx-3 my-3">
-                <div className="card-header">Resumen Global</div>
-                <div className="card-body">
-                    <TempCharts/>
-                </div>
-            </div>
             <h2 className='display-6 mt-5'>Dispositivos Activos</h2>
             <hr className='divider'/>
-            <ThermostatItem />
+            <div className="col-md-6">
+                <ThermostatItem />
+            </div>
+            <div className="col-md-6">
+                <div className="card text-bg-light">
+                    <div className="card-header">Resumen Global</div>
+                    <div className="card-body">
+                        <TempCharts/>
+                    </div>
+                </div>
+            </div>
             <h2 className='display-6 mt-5'>Configuracion</h2>
             <hr className='divider'/>
-            <div className="card text-bg-light mx-3 my-3">
-                <div className="d-flex align-items-center justify-content-between card-header">
+            <div className="card text-bg-light mt-3">
+                <div className="d-flex justify-content-between card-header">
                     <h4>Resumen Global</h4>
-                    <button className='btn btn-primary'>Configurar Dispositivo</button>
+                    <a className='btn btn-primary' href="/thermostat/config">Configurar Dispositivo</a>
                 </div>
                 <div className="card-body">
                     <table class="table table-striped">

@@ -49,29 +49,33 @@ const LightForm = () => {
     }, []);
 
     return(
-        <div className="col-md-3 mx-auto">
-            <h2 className="mb-3 text-center">Ingrese Nuevo Dispositivo</h2>
-            <h4 className="mb-3 text-center">Luminarias</h4>
-            <form onSubmit={HandleSubmit}>
-                <div className="mb-3">
-                    <label className="form-label">Ubicación:</label>
-                    <input type="text" name="ubicacion" value={Lights.ubicacion} onChange={HandleInputChange} className="form-control" required />
+        <div className="row">
+            <h2 className="display-6 text-center">Luminarias / Configuracion</h2>
+            <hr className="divider"/>
+            <div className="d-flex flex-row justify-content-center mt-2">
+                <div className="d-flex flex-column">
+                    <form onSubmit={HandleSubmit}>
+                        <div className="mb-3">
+                            <label className="form-label">Ubicación:</label>
+                            <input type="text" name="ubicacion" value={Lights.ubicacion} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Estado:</label>
+                            <input type="text" name="estado" value={Lights.estado} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Encendido Automático:</label>
+                            <input type="time" step="00:00:00" name="auto_encendido" value={Lights.auto_encendido} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Apagado Automático:</label>
+                            <input type="time" name="auto_apagado" value={Lights.auto_apagado} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <button type="submit" step="00:00:00" className="btn btn-primary">Submit</button>
+                        <a type="button" className="btn btn-secondary mx-3" href="/lights">Return</a>
+                    </form>
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Estado:</label>
-                    <input type="text" name="estado" value={Lights.estado} onChange={HandleInputChange} className="form-control" required />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Encendido Automático:</label>
-                    <input type="time" step="00:00:00" name="auto_encendido" value={Lights.auto_encendido} onChange={HandleInputChange} className="form-control" required />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Apagado Automático:</label>
-                    <input type="time" name="auto_apagado" value={Lights.auto_apagado} onChange={HandleInputChange} className="form-control" required />
-                </div>
-                <button type="submit" step="00:00:00" className="btn btn-primary">Submit</button>
-                <a type="button" className="btn btn-secondary mx-3" href="/addDevices">Return</a>
-            </form>
+            </div>
         </div>
         
     )

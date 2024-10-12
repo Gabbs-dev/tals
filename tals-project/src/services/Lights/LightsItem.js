@@ -22,6 +22,28 @@ const LightItem = () => {
         return () => clearInterval(interval);
     }, [] );
 
+
+    const handleClick = async (buttonName) => {
+        try {
+            // Extraer el número de luz del nombre del botón
+            const lightNumber = buttonName.slice(3);
+            // Crear una copia del estado actual de Luminaria {luz1: 1, ...}
+            const newLuminariaState = { ...Luminaria.lastLight };
+            // Actualizar el estado del relé modificado (0 para apagado, 1 para encendido)
+            newLuminariaState[`luz${lightNumber}`] = newLuminariaState[`luz${lightNumber}`] === 0 ? 1 : 0;
+            // Enviar la solicitud POST con todos los estados
+            const response = await LightsServer.createLightState(newLuminariaState);
+            console.log(response);
+            if (response.ok) {
+              setLuminaria({ ...Luminaria, lastLight: newLuminariaState });
+            } else {
+              console.error('Error al actualizar el estado de la luz:', response.statusText);
+            }
+          } catch (error) {
+            console.log(error);
+        }
+    };
+
     function getEstadoLuz(luz) {
         switch (luz) {
             case 0:
@@ -33,78 +55,110 @@ const LightItem = () => {
         };
     };
 
-    const handleClick = async (buttonnNumber,lightNumber) => {
-        try {
-            const newLightState = Luminaria?.lastLight[`luz${lightNumber}`] === 0 ? 1 : 0;
-            // Construimos un objeto con los estados de ambas luces
-            if (buttonnNumber === 'luz1') {
-                const dataToSend = {
-                    'luz1': newLightState,
-                };
-                // Enviamos la solicitud POST
-                const response = await LightsServer.createLightState(dataToSend);
-                if(response.ok){
-                    setLuminaria({...Luminaria,lastLight:{...Luminaria.lastLight,[`luz${lightNumber}`]: newLightState}});
-                } else {
-                    console.error('Error al actualizar el estado de la luz:', response.statusText);
-                };
-            } else if (buttonnNumber === 'luz2') {
-                const dataToSend = {
-                    'luz2': newLightState,
-                };
-                // Enviamos la solicitud POST
-                const response = await LightsServer.createLightState(dataToSend);
-                if(response.ok){
-                    setLuminaria({...Luminaria,lastLight:{...Luminaria.lastLight,[`luz${lightNumber}`]: newLightState}});
-                } else {
-                    console.error('Error al actualizar el estado de la luz:', response.statusText);
-                };
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    console.log(Luminaria);
 
     return(
-        <div className="d-flex flex-row mb-3 justify-content-evenly">
-            <div className='d-flex flex-column'>
-                <div className="card card-body">
-                    <div className="d-inline-flex justify-content-between">    
-                        <h3 className="card-tittle">Luz</h3>
-                        {Luminaria?.lastLight?.luz1 === 0 ? (
-                            <button type='submit' className="btn btn-outline-warning" name='luz1' onClick={() => handleClick('luz1',1)}>
-                                <i className="bi bi-lightbulb" />
-                            </button>
-                        ) : Luminaria?.lastLight?.luz1 === 1 ? (
-                            <button type='submit' className="btn btn-outline-warning" name='luz1' onClick={() => handleClick('luz1',0)}>
-                                <i className="bi bi-lightbulb" />
-                            </button>
-                        ) : null}
+        <div className="row">
+            <div className="d-flex flex-row mb-3 justify-content-evenly">
+                <div className='d-flex flex-column'>
+                    <div className="card card-body">
+                        <div className="d-inline-flex justify-content-between">    
+                            <h3 className="card-tittle">Luz 1</h3>
+                            {Luminaria?.lastLight?.luz1 !== undefined && (
+                                <button type='submit' className="btn btn-outline-warning" name="luz1" onClick={() => handleClick('luz1')}>
+                                    <i className="bi bi-lightbulb" />
+                                </button>
+                            )}
+                        </div>
+                        <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz1)}</strong></p>
+                        <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
+                        <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
+                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
                     </div>
-                    <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz1)}</strong></p>
-                    <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
-                    <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
-                    <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
+                </div>
+                <div className='d-flex flex-column'>
+                    <div className="card card-body">
+                        <div className="d-inline-flex justify-content-between">    
+                            <h3 className="card-tittle">Luz 2</h3>
+                            {Luminaria?.lastLight?.luz2 !== undefined && (
+                                <button type='submit' className="btn btn-outline-warning" name="luz2" onClick={() => handleClick('luz2')}>
+                                    <i className="bi bi-lightbulb" />
+                                </button>
+                            )}
+                        </div>
+                        <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz2)}</strong></p>
+                        <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
+                        <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
+                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
+                    </div>
                 </div>
             </div>
-            <div className='d-flex flex-column'>
-                <div className="card card-body">
-                    <div className="d-inline-flex justify-content-between">    
-                        <h3 className="card-tittle">Luz</h3>
-                        {Luminaria?.lastLight?.luz2 === 0 ? (
-                            <button type='submit' className="btn btn-outline-warning" name='luz2' onClick={() => handleClick('luz2',1)}>
-                                <i className="bi bi-lightbulb" />
-                            </button>
-                        ) : Luminaria?.lastLight?.luz2 === 1 ? (
-                            <button type='submit' className="btn btn-outline-warning" name='luz2' onClick={() => handleClick('luz2',0)}>
-                                <i className="bi bi-lightbulb" />
-                            </button>
-                        ) : null}
+            <div className="d-flex flex-row mb-3 justify-content-evenly">
+                <div className='d-flex flex-column'>
+                    <div className="card card-body">
+                        <div className="d-inline-flex justify-content-between">    
+                            <h3 className="card-tittle">Luz 3</h3>
+                            {Luminaria?.lastLight?.luz3 !== undefined && (
+                                <button type='submit' className="btn btn-outline-warning" name="luz3" onClick={() => handleClick('luz3')}>
+                                    <i className="bi bi-lightbulb" />
+                                </button>
+                            )}
+                        </div>
+                        <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz3)}</strong></p>
+                        <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
+                        <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
+                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
                     </div>
-                    <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz2)}</strong></p>
-                    <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
-                    <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
-                    <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
+                </div>
+                <div className='d-flex flex-column'>
+                    <div className="card card-body">
+                        <div className="d-inline-flex justify-content-between">    
+                            <h3 className="card-tittle">Luz 4</h3>
+                            {Luminaria?.lastLight?.luz4 !== undefined && (
+                                <button type='submit' className="btn btn-outline-warning" name="luz4" onClick={() => handleClick('luz4')}>
+                                    <i className="bi bi-lightbulb" />
+                                </button>
+                            )}
+                        </div>
+                        <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz4)}</strong></p>
+                        <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
+                        <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
+                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
+                    </div>
+                </div>
+            </div>
+            <div className="d-flex flex-row mb-3 justify-content-evenly">
+                <div className='d-flex flex-column'>
+                    <div className="card card-body">
+                        <div className="d-inline-flex justify-content-between">    
+                            <h3 className="card-tittle">Luz 5</h3>
+                            {Luminaria?.lastLight?.luz5 !== undefined && (
+                                <button type='submit' className="btn btn-outline-warning" name="luz5" onClick={() => handleClick('luz5')}>
+                                    <i className="bi bi-lightbulb" />
+                                </button>
+                            )}
+                        </div>
+                        <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz5)}</strong></p>
+                        <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
+                        <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
+                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
+                    </div>
+                </div>
+                <div className='d-flex flex-column'>
+                    <div className="card card-body">
+                        <div className="d-inline-flex justify-content-between">    
+                            <h3 className="card-tittle">Luz 6</h3>
+                            {Luminaria?.lastLight?.luz6 !== undefined && (
+                                <button type='submit' className="btn btn-outline-warning" name="luz6" onClick={() => handleClick('luz6')}>
+                                    <i className="bi bi-lightbulb" />
+                                </button>
+                            )}
+                        </div>
+                        <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz6)}</strong></p>
+                        <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
+                        <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
+                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
+                    </div>
                 </div>
             </div>
         </div>

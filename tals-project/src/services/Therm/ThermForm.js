@@ -49,25 +49,39 @@ const ThermForm = () => {
     }, []);
 
     return(
-        <div className="col-md-3 mx-auto">
-            <h2 className="mb-3 text-center">Ingrese Nuevo Dispositivo</h2>
-            <h4 className="mb-3 text-center">Termostato</h4>
-            <form onSubmit={HandleSubmit}>
-                <div className="mb-3">
-                    <input type="hidden" step="0.1" name="registro_temperatura" value={Thermostats.registro_temperatura} onChange={HandleInputChange} className="form-control" />
+        <div className="row">
+            <h2 className="display-6 text-center">Termostato / Configuración</h2>
+            <hr className="divider"/>
+            <div className="d-flex flex-row justify-content-center mt-2">
+                <div className="d-flex flex-column">
+                    <form onSubmit={HandleSubmit}>
+                        <div className="mb-3">
+                            <input type="hidden" step="0.1" name="registro_temperatura" value={Thermostats.registro_temperatura} onChange={HandleInputChange} className="form-control" />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Temperatura Deseada:</label>
+                            <input type="number" step="0.1" name="temperatura_deseada" value={Thermostats.temperatura_deseada} onChange={HandleInputChange} className="form-control" required />
+                        </div><div className="mb-3">
+                            <label className="form-label">Temperatura Deseada:</label>
+                            <input type="number" step="0.1" name="temperatura_deseada" value={Thermostats.temperatura_deseada} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Temperatura Deseada:</label>
+                            <input type="number" step="0.1" name="temperatura_deseada" value={Thermostats.temperatura_deseada} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Temperatura Deseada:</label>
+                            <input type="number" step="0.1" name="temperatura_deseada" value={Thermostats.temperatura_deseada} onChange={HandleInputChange} className="form-control" required />
+                        </div>
+                        <div className="mb-3">
+                            <input type="hidden" name="date" value={Thermostats.date} onChange={HandleInputChange} className="form-control" />
+                        </div>
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                        <a type="button" className="btn btn-secondary mx-3" href="/thermostat">Return</a>
+                    </form>
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Temperatura Deseada:</label>
-                    <input type="number" step="0.1" name="temperatura_deseada" value={Thermostats.temperatura_deseada} onChange={HandleInputChange} className="form-control" required />
-                </div>
-                <div className="mb-3">
-                    <input type="hidden" name="date" value={Thermostats.date} onChange={HandleInputChange} className="form-control" />
-                </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
-                <a type="button" className="btn btn-secondary mx-3" href="/addDevices">Return</a>
-            </form>
+            </div>
         </div>
-        
     )
 };
 

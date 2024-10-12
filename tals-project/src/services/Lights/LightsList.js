@@ -6,23 +6,27 @@ const LightsList = () => {
 
     return (
         <div className='row'>
-            <h1 className='display-5'>Panel de Control / Luminarias</h1>
+            <h1 className='display-4'>Panel de Control / Luminarias</h1>
             <hr className='divider'/>
-            <div className="card text-bg-light mx-3 my-3">
-                <div className="card-header">Resumen Global</div>
-                <div className="card-body">
-                    <LightsChart/>
+            <h3 className='display-6 mt-5'>Dispositivos Disponibles</h3>
+            <hr className='divider'/>
+            <div className="col-md-6">
+                <LightItem />
+            </div>
+            <div className="col-md-6">
+                <div className="card text-bg-light">
+                    <div className="card-header">Resumen Global</div>
+                    <div className="card-body">
+                        <LightsChart/>
+                    </div>
                 </div>
             </div>
-            <h2 className='display-6 mt-5'>Dispositivos Disponibles</h2>
-            <hr className='divider'/>
-            <LightItem />
             <h2 className='display-6 mt-5'>Configuracion</h2>
             <hr className='divider'/>
-            <div className="card text-bg-light mx-3 my-3">
+            <div className="card text-bg-light">
                 <div className="d-flex align-items-center justify-content-between card-header">
                     <h4>Resumen Global</h4>
-                    <button className='btn btn-primary'>Configurar Dispositivo</button>
+                    <a className='btn btn-primary' href="/lights/config">Configurar Dispositivo</a>
                 </div>    
                 <div className="card-body">
                     <table class="table table-striped">

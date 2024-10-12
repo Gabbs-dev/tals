@@ -18,16 +18,16 @@ const Header = () => {
                   <div className="offcanvas-body">
                     <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                       <li className="nav-item">
-                        <a className="nav-link active" aria-current="page" href="/">Dashboard</a>
+                        <a className="nav-link active" aria-current="page" href="/"><i class="bi bi-speedometer"/> Dashboard</a>
                       </li>
                       <li className="nav-item">
-                        <a className="nav-link active" href="/users">Usuarios</a>
+                        <a className="nav-link active" href="/users"><i class="bi bi-people"/> Usuarios</a>
                       </li>
                       <li className="nav-item">
-                        <a className="nav-link active" href="/devices">Agregar Dispositivo</a>
+                        <a className="nav-link active" href="/devices"><i class="bi bi-plus-circle"/> Agregar Dispositivo</a>
                       </li>
                       <li className="nav-item">
-                        <div className="accordion" id="accordionExample">
+                        <div className="accordion mt-3" id="accordionExample">
                             <div className="accordion-item">
                                 <h2 className="accordion-header">
                                     <button className="accordion-button bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
@@ -37,13 +37,13 @@ const Header = () => {
                                 <div id="collapseOne" className="accordion-collapse collapse show">
                                     <div className="accordion-body bg-dark">
                                         <ul className="navbar-nav">
-                                           <li className="nav-item"><a className="nav-link active" href="/lights">Luminarias</a></li> 
+                                           <li className="nav-item"><a className="nav-link active" href="/lights"><i class="bi bi-lightbulb"/> Luminarias</a></li> 
                                         </ul>
                                         <ul className="navbar-nav">
-                                           <li className="nav-item"><a className="nav-link active" href="/water">Agua</a></li> 
+                                           <li className="nav-item"><a className="nav-link active" href="/water"><i class="bi bi-droplet"/> Agua</a></li> 
                                         </ul>
                                         <ul className="navbar-nav">
-                                           <li className="nav-item"><a className="nav-link active" href="/thermostat">Temperatura</a></li> 
+                                           <li className="nav-item"><a className="nav-link active" href="/thermostat"><i class="bi bi-thermometer"/> Temperatura</a></li> 
                                         </ul>
                                     </div>
                                 </div>
