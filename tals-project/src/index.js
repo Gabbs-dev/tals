@@ -16,6 +16,7 @@ import ThermList from './services/Therm/ThermList';
 import ThermForm from './services/Therm/ThermForm';
 import DevicesList from './services/Devices';
 import SprayForm from './services/Water/SprayForm';
+import SecurityList from './services/Security/SecurityList'
 
 //externals
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -44,7 +45,7 @@ root.render(
                 <Route path='/water/sprayconfig/:id' Component={SprayForm} />
                 <Route path='/thermostat' Component={ThermList} />
                 <Route path='/thermostat/config' Component={ThermForm} />
-                <Route path='/thermostat/config/:id' Component={ThermForm} />
+                <Route path='/security/' Component={SecurityList} />
             </Routes>
         </div>
     </BrowserRouter>

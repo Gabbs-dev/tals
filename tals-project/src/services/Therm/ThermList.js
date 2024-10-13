@@ -8,10 +8,10 @@ const ThermList = () => {
             <hr className='divider'/>
             <h2 className='display-6 mt-5'>Dispositivos Activos</h2>
             <hr className='divider'/>
-            <div className="col-md-6">
+            <div className="col-md-4">
                 <ThermostatItem />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-8">
                 <div className="card text-bg-light">
                     <div className="card-header">Resumen Global</div>
                     <div className="card-body">

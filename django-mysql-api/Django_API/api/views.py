@@ -323,17 +323,22 @@ class SensorMovimientoView(View):
             m_sensors=list(SensorMovimiento.objects.filter(id=id).values())
             if len(m_sensors) > 0:
                 m_sensor=m_sensors[0]
-                datos = {'message': "Success", 'Motion Sensor': m_sensor}
+                datos = {'message': "Success", 'MotionSensor': m_sensor}
             else:
                 datos= {'message': "Motion Sensor not found"}
             return JsonResponse(datos)
         else:
-            m_sensors= list(SensorMovimiento.objects.values())
-            if len(m_sensors)>0:
-                datos= {'message': "Success",'Motion Sensors':m_sensors}
+            m_sensor = SensorMovimiento.objects.order_by('date').last()
+            if m_sensor:
+                data = {
+                    'id': m_sensor.id,
+                    'estado': m_sensor.estado,
+                    'date': m_sensor.date,
+                }
+                datos = {'message': "Success", 'MotionSensor': data}
             else:
-                datos= {'message': "Motion Sensors not found"}
-            return JsonResponse(datos) 
+                datos = {'message': "Data not found"}
+            return JsonResponse(datos)
 
     def post(self, request):
         jd = json.loads(request.body)
