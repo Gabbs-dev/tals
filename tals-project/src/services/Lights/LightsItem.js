@@ -35,11 +35,11 @@ const LightItem = () => {
             const response = await LightsServer.createLightState(newLuminariaState);
             console.log(response);
             if (response.ok) {
-              setLuminaria({ ...Luminaria, lastLight: newLuminariaState });
+            setLuminaria({ ...Luminaria, lastLight: newLuminariaState });
             } else {
-              console.error('Error al actualizar el estado de la luz:', response.statusText);
+            console.error('Error al actualizar el estado de la luz:', response.statusText);
             }
-          } catch (error) {
+        } catch (error) {
             console.log(error);
         }
     };

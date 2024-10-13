@@ -167,104 +167,92 @@ class CamarasView(View):
 class LuminariaView(View):
 
     @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs) :
+    def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, id=0):
-        if(id>0):
-            lights=list(Luminaria.objects.filter(id=id).values())
-            if len(lights) > 0:
-                light=lights[0]
-                datos = {'message': "Success", 'Light': light}
-            else:
-                datos= {'message': "Light not found"}
-            return JsonResponse(datos)
-        else:
-            last_light = Luminaria.objects.order_by('id').last()
-            if last_light:
-                data = {
-                    'id': last_light.id,
-                    'luz1': last_light.luz1,
-                    'luz2': last_light.luz2,
-                    'luz3': last_light.luz3,
-                    'luz4': last_light.luz4,
-                    'luz5': last_light.luz5,
-                    'luz6': last_light.luz6,
-                    'date': last_light.date,
-                }
-                datos = {'message': "Success", 'lastLight': data}
-            else:
-                datos = {'message': "Data not found"}
-            return JsonResponse(datos) 
+        if id > 0:
+            return self._get_single_light(id)
+        return self._get_last_light()
 
     def post(self, request):
-        # Obtener los valores de las luces
         jd = json.loads(request.body)
-        luz1 = jd.get('luz1')
-        luz2 = jd.get('luz2')
-        luz3 = jd.get('luz3')
-        luz4 = jd.get('luz4')
-        luz5 = jd.get('luz5')
-        luz6 = jd.get('luz6')
+        luz_values = [jd.get(f'luz{i}') for i in range(1, 7)]
+        return self._process_lights(luz_values)
+
+    def put(self, request, id):
+        jd = json.loads(request.body)
+        try:
+            light = Luminaria.objects.get(id=id)
+            self._update_light(light, jd)
+            return JsonResponse({'message': "Success"})
+        except Luminaria.DoesNotExist:
+            return JsonResponse({'message': "Light not found"})
+
+    def delete(self, request, id):
+        if Luminaria.objects.filter(id=id).exists():
+            Luminaria.objects.filter(id=id).delete()
+            return JsonResponse({'message': "Success"})
+        return JsonResponse({'message': "Light not found"})
+
+    # Métodos auxiliares
+    def _get_single_light(self, id):
+        light = Luminaria.objects.filter(id=id).values().first()
+        if light:
+            return JsonResponse({'message': "Success", 'Light': light})
+        return JsonResponse({'message': "Light not found"})
+
+    def _get_last_light(self):
+        last_light = Luminaria.objects.order_by('id').last()
+        if last_light:
+            data = {
+                'id': last_light.id,
+                'luz1': last_light.luz1,
+                'luz2': last_light.luz2,
+                'luz3': last_light.luz3,
+                'luz4': last_light.luz4,
+                'luz5': last_light.luz5,
+                'luz6': last_light.luz6,
+                'date': last_light.date,
+            }
+            return JsonResponse({'message': "Success", 'lastLight': data})
+        return JsonResponse({'message': "Data not found"})
+
+    def _process_lights(self, luz_values):
         with serial.Serial('COM1', 9600) as ser:
             data = ser.readline().decode('utf-8').strip()
             if data:
-                # Convertir el string JSON a un diccionario
-                jd = json.loads(data)
-                rluz1 = jd['estado_rele']
-                rluz2 = jd['estado_rele2']
-                rluz3 = jd['estado_rele3']
-                rluz4 = jd['estado_rele4']
-                rluz5 = jd['estado_rele5']
-                rluz6 = jd['estado_rele6']
-                # Construir el comando
-                comando = ""
-                if luz1 != rluz1:
-                    comando += f"{luz1},"
-                elif luz2 != rluz2:
-                    comando += f"{luz2},"
-                elif luz3 != rluz3:
-                    comando += f"{luz3},"
-                elif luz4 != rluz4:
-                    comando += f"{luz4},"
-                elif luz5 != rluz5:
-                    comando += f"{luz5},"
-                elif luz6 != rluz6:
-                    comando += f"{luz6},"
-                comando += f"{0},{90}"
-                # Enviar comando sólo si hay cambios '0,0,0,0,0,0,0,90'
-                if comando:
-                    comando += "\n"
-                    command = ser.write(comando.encode('utf-8'))
-                    if command:
-                        datos = {'message': "Success"}
-                    else:
-                        datos = {'message': "error"}
-                    return JsonResponse(datos)
+                received = json.loads(data)
+                command = self._build_command(luz_values, received)
+                if command:
+                    ser.write(command.encode('utf-8'))
+                    return JsonResponse({'message': "Success"})
+            return JsonResponse({'message': "Error"})
 
-        def put(self, request, id):
-            jd = json.loads(request.body)
-            lights= list(Luminaria.objects.filter(id=id).values())
-            if len(lights) > 0:
-                light= Luminaria.objects.get(id=id)
-                light.ubicacion= jd['ubicacion']
-                light.estado= jd['estado']
-                light.auto_encendido=jd['auto_encendido']
-                light.auto_apagado=jd['auto_apagado']
-                light.save()
-                datos= {'message': "Success"}
+    def _build_command(self, luz_values, received):
+        commands = []
+        for i in range(6):
+            luz_actual = luz_values[i]
+            estado_rele = received.get(f'estado_rele{i + 1}')
+            if luz_actual != estado_rele:
+                # Agregamos el valor al comando si hay diferencia
+                commands.append(str(luz_actual))
             else:
-                datos= {'message': "Light not found"}
-            return JsonResponse(datos)
+                # Si no hay diferencia, agregamos el valor existente
+                commands.append(str(estado_rele))
 
-    def delete(self, request, id):
-        lights= list(Luminaria.objects.filter(id=id).values())
-        if len(lights) > 0:
-            Luminaria.objects.filter(id=id).delete()
-            datos= {'message': "Success"}
-        else:
-            datos= {'message': "Light not found"}
-        return JsonResponse(datos)
+        comando = f"{','.join(commands)},{0},{40}\n"
+
+        if any(luz_values[i] != received.get(f'estado_rele{i + 1}') for i in range(6)):
+            return comando
+        return ""
+
+    def _update_light(self, light, data):
+        light.ubicacion = data.get('ubicacion', light.ubicacion)
+        light.estado = data.get('estado', light.estado)
+        light.auto_encendido = data.get('auto_encendido', light.auto_encendido)
+        light.auto_apagado = data.get('auto_apagado', light.auto_apagado)
+        light.save()
 class RegadoView(View):
 
     @method_decorator(csrf_exempt)
@@ -395,8 +383,6 @@ class TanqueAguaView(View):
                 data = {
                     'id': last_watertank.id,
                     'nivel_agua': last_watertank.nivel_agua,
-                    'nivel_max': last_watertank.nivel_max,
-                    'nivel_min': last_watertank.nivel_min,
                     'date': last_watertank.date,
                 }
                 datos = {'message': "Success", 'Watertank': data}
