@@ -21,33 +21,36 @@ import SecurityList from './services/Security/SecurityList'
 //externals
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { useNotification, NotificationProvider} from './Header/Notifications/NotificationServer'
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
     <BrowserRouter>
-        <Header/>
-        <div className="container my-4">
-            <Routes>       
-                <Route exact path='/' Component={Dashboard} />
-                <Route path='/devices' Component={DevicesList} />
-                <Route path='/users' Component={UsersList} />
-                <Route path='/users/register' Component={UsersForm} />
-                <Route path='/users/update/:id' Component={UsersForm} />
-                <Route path='/lights' Component={LightsList} />
-                <Route path='/lights/config' Component={LightsForm} />
-                <Route path='/lights/config/:id' Component={LightsForm} />
-                <Route path='/water' Component={WTList} />
-                <Route path='/water/tanklevelconfig' Component={WTForm} />
-                <Route path='/water/tanklevelconfig/:id' Component={WTForm} />
-                <Route path='/water/sprayconfig' Component={SprayForm} />
-                <Route path='/water/sprayconfig/:id' Component={SprayForm} />
-                <Route path='/thermostat' Component={ThermList} />
-                <Route path='/thermostat/config' Component={ThermForm} />
-                <Route path='/security/' Component={SecurityList} />
-            </Routes>
-        </div>
+        <NotificationProvider>
+            <Header/>
+            <div className="container my-4">
+                <Routes>       
+                    <Route exact path='/' Component={Dashboard} />
+                    <Route path='/devices' Component={DevicesList} />
+                    <Route path='/users' Component={UsersList} />
+                    <Route path='/users/register' Component={UsersForm} />
+                    <Route path='/users/update/:id' Component={UsersForm} />
+                    <Route path='/lights' Component={LightsList} />
+                    <Route path='/lights/config' Component={LightsForm} />
+                    <Route path='/lights/config/:id' Component={LightsForm} />
+                    <Route path='/water' Component={WTList} />
+                    <Route path='/water/tanklevelconfig' Component={WTForm} />
+                    <Route path='/water/tanklevelconfig/:id' Component={WTForm} />
+                    <Route path='/water/sprayconfig' Component={SprayForm} />
+                    <Route path='/water/sprayconfig/:id' Component={SprayForm} />
+                    <Route path='/thermostat' Component={ThermList} />
+                    <Route path='/thermostat/config' Component={ThermForm} />
+                    <Route path='/security/' Component={SecurityList} />
+                </Routes>
+            </div>
+        </NotificationProvider>
     </BrowserRouter>
 );
 
