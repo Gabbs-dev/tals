@@ -1185,6 +1185,8 @@ class TanqueaguaNivelesView(View):
             event= TanqueAguaNiveles.objects.get(id=id)
             event.nivel_maximo= jd['nivel_maximo']
             event.nivel_minimo= jd['nivel_minimo']
+            event.altura= jd['altura']
+            event.diametro= jd['diametro']
             event.save()
             datos= {'message': "Success"}
         else:
@@ -1225,7 +1227,7 @@ class TemporizadorView(View):
 
     def post(self, request):
         jd = json.loads(request.body)
-        TanqueAguaNiveles.objects.create(dispositivo=jd['dispositivo'],fecha_inicio=jd['fecha_inicio'],fecha_cierre=jd['fecha_cierre'])
+        TanqueAguaNiveles.objects.create(dispositivo=jd['dispositivo'],horario_inicio=jd['horario_inicio'],horario_cierre=jd['horario_cierre'])
         datos= {'message': "Success"}
         return JsonResponse(datos)
 
@@ -1235,8 +1237,8 @@ class TemporizadorView(View):
         if len(events) > 0:
             event= TanqueAguaNiveles.objects.get(id=id)
             event.dispositivo= jd['dispositivo']
-            event.fecha_inicio= jd['fecha_inicio']
-            event.fecha_cierre= jd['fecha_cierre']
+            event.horario_inicio= jd['horario_inicio']
+            event.horario_cierre= jd['horario_cierre']
             event.save()
             datos= {'message': "Success"}
         else:

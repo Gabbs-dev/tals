@@ -9,7 +9,7 @@ const LightForm = () => {
     const navigate = useNavigate();
     const params = useParams();
 
-    const initialState={id:0,ubicacion:"",estado:"",auto_encendido:"",auto_apagado:""};
+    const initialState={id:0,ubicacion:"",estado:"",horario_inicio:"",horario_cierre:""};
     const [Lights, setLights]= useState(initialState);
 
     const HandleInputChange = (e) =>{
@@ -20,7 +20,7 @@ const LightForm = () => {
         e.preventDefault();
         try{
             let res;
-            res= await LightsServer.registerLight(Lights);
+            res= await LightsServer;
             const data= await res.json();
             if(data.message==="Success"){
                 setLights(initialState);
@@ -35,8 +35,8 @@ const LightForm = () => {
         try{
             const res = await LightsServer.getLight(LightID);
             const data = await res.json();
-            const {ubicacion,estado,auto_encendido,auto_apagado}= data.Lights;
-            setLights({ubicacion,estado,auto_encendido,auto_apagado});
+            const {ubicacion,estado,horario_inicio,horario_cierre}= data.Lights;
+            setLights({ubicacion,estado,horario_inicio,horario_cierre});
         }catch(error){
             console.log(error);
         }
@@ -56,20 +56,15 @@ const LightForm = () => {
                 <div className="d-flex flex-column">
                     <form onSubmit={HandleSubmit}>
                         <div className="mb-3">
-                            <label className="form-label">Ubicación:</label>
-                            <input type="text" name="ubicacion" value={Lights.ubicacion} onChange={HandleInputChange} className="form-control" required />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Estado:</label>
-                            <input type="text" name="estado" value={Lights.estado} onChange={HandleInputChange} className="form-control" required />
+                            <input type="text" name="dispositivo" value={Lights.dispositivo} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Encendido Automático:</label>
-                            <input type="time" step="00:00:00" name="auto_encendido" value={Lights.auto_encendido} onChange={HandleInputChange} className="form-control" required />
+                            <input type="time" step="00:00:00" name="horario_inicio" value={Lights.horario_inicio} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Apagado Automático:</label>
-                            <input type="time" name="auto_apagado" value={Lights.auto_apagado} onChange={HandleInputChange} className="form-control" required />
+                            <input type="time" name="horario_cierre" value={Lights.horario_cierre} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <button type="submit" step="00:00:00" className="btn btn-primary">Submit</button>
                         <a type="button" className="btn btn-secondary mx-3" href="/lights">Return</a>

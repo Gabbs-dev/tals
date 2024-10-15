@@ -4,12 +4,12 @@ import * as CameraServer from './CameraServer';
 import React, { useEffect, useState } from 'react';
 
 const SecurityList = () =>{
-    const [CamStatus, setCamStatus] = useState([]);
+    const [MovementActivity, setMovementActivity] = useState([]);
     const Activity = async () => {
         try{
             const res = await CameraServer.getCameraStatus();
             const data = await res.json();
-            setCamStatus(data);
+            setMovementActivity(data);
         }catch(error){
             console.log(error);
             return null;

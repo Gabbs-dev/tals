@@ -6,6 +6,9 @@ import React, { useEffect, useState } from 'react';
 
 const WTList = () => {
     const [TanqueAguaLevels, setTanqueAguaLevels] = useState([]);
+    const [showConfigButton, setShowConfigButton] = useState(false);
+    const [showEditButtons, setShowEditButtons] = useState(false);
+
     const Levels = async () => {
         try{
             const res = await WTServer.getWatertankLevel(1);
@@ -19,6 +22,16 @@ const WTList = () => {
     useEffect(() => {
         Levels();
     }, [] );
+    
+    useEffect(() => {
+        if (TanqueAguaLevels && TanqueAguaLevels.tanklevel) {
+            setShowConfigButton(false); // Ocultar botón de configurar si hay registros
+            setShowEditButtons(true); // Mostrar botones de editar y eliminar
+        } else {
+            setShowConfigButton(true); // Mostrar botón de configurar si no hay registros
+            setShowEditButtons(false); // Ocultar botones de editar y eliminar
+        }
+    }, [TanqueAguaLevels]);
 
     return (
         <div className='row'>
@@ -42,7 +55,9 @@ const WTList = () => {
             <div className="card text-bg-light mt-3">
                 <div className="d-flex aling-items-center justify-content-between card-header">
                     <h4>Resumen Global</h4>
-                    <a className='btn btn-primary' href="/water/tanklevelconfig">Configurar Dispositivo</a>
+                    {showConfigButton && (
+                        <a className='btn btn-primary' href="/water/tanklevelconfig">Configurar Dispositivo</a>
+                    )}
                 </div>
                 <div className="card-body">
                     <table class="table table-striped">
@@ -55,15 +70,18 @@ const WTList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">{TanqueAguaLevels?.tanklevel?.id}</th>
-                                <td>{TanqueAguaLevels?.tanklevel?.nivel_maximo}</td>
-                                <td>{TanqueAguaLevels?.tanklevel?.nivel_minimo}</td>
-                                <td>
-                                    <a className="btn btn-warning mx-2" href={'/water/tanklevelconfig/'+(TanqueAguaLevels?.tanklevel?.id)}><i className="bi bi-pencil"/></a>
-                                    <a className="btn btn-danger" href={'/water/tanklevelconfig/'+(TanqueAguaLevels?.tanklevel?.id)}><i className="bi bi-trash"/></a>
-                                </td>
-                            </tr>
+                            {TanqueAguaLevels && TanqueAguaLevels.tanklevel && (
+                                <tr>
+                                    <th scope="row">{TanqueAguaLevels.tanklevel.id}</th>
+                                    <td>{TanqueAguaLevels.tanklevel.nivel_maximo}</td>
+                                    <td>{TanqueAguaLevels.tanklevel.nivel_minimo}</td>
+                                    <td>
+                                    {showEditButtons && (
+                                        <a className="btn btn-warning" href={'/water/tanklevelconfig/'+(TanqueAguaLevels?.tanklevel?.id)}><i className="bi bi-pencil"/></a>
+                                    )}
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>

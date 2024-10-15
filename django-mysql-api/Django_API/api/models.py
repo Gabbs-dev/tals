@@ -213,8 +213,8 @@ class TanqueAguaNiveles(models.Model):
 
 class Temporizador(models.Model):
     dispositivo = models.CharField(max_length=50, blank=True, null=True)
-    fecha_inicio = models.TimeField(blank=True, null=True)
-    fecha_cierre = models.TimeField(blank=True, null=True)
+    horario_inicio = models.TimeField(blank=True, null=True)
+    horario_cierre = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False

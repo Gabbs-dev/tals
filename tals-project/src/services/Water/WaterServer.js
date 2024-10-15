@@ -54,6 +54,16 @@ export const registerWatertankLevels = async (newWatertank) => {
     });
 };
 
+export const updateWatertankLevels = async (WTID, updatedData) => {
+    return await fetch(`${API_URL_Levels}${WTID}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData)
+    });
+};
+
 export const deleteWatertankLevels = async (WTID) => {
     return await fetch(`${API_URL_Levels}${WTID}`, {
         method: 'DELETE',

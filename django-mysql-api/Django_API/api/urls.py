@@ -48,5 +48,6 @@ urlpatterns = [
     path('watertankevents/<int:id>',TanqueAguaHasEventoView.as_view(), name='watertankevent_process'),
     path('thermostatevents/',TermostatoHasEventoView.as_view(), name='thermostatevents_list'),
     path('thermostatevents/<int:id>',TermostatoHasEventoView.as_view(), name='thermostatevent_process'),
-    path('timer/<int:id>',TemporizadorView.as_view(), name='temporizador_list'),
+    path('timer/',TemporizadorView.as_view(), name='temporizador_list'),
+    path('timer/<int:id>',TemporizadorView.as_view(), name='temporizador_process'),
 ]

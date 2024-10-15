@@ -9,44 +9,62 @@ const WTForm = () => {
     const navigate = useNavigate();
     const params = useParams();
 
-    const initialState={id:0, nivel_maximo:"00",nivel_minimo:"00",altura:"0.0",diametro:"0.0"};
+    const initialState={id:0,nivel_maximo:"00",nivel_minimo:"00",altura:"0.0",diametro:"0.0"};
     const [WaterTankLevels, setWTL]= useState(initialState);
 
     const HandleInputChange = (e) =>{
         setWTL({...WaterTankLevels,[e.target.name]:e.target.value});
     };
 
-    const HandleSubmit = async (e) =>{
+    const HandleSubmit = async (e) => {
         e.preventDefault();
-        try{
-            let res;
-            res= await WaterServer.registerWatertankLevels(WaterTankLevels);
-            const data= await res.json();
-            if(data.message==="Success"){
-                setWTL(initialState);
+        try {
+            const { id, ...rest } = WaterTankLevels;
+            if (id) {
+                // Si existe un ID, actualizar el registro
+                const res = await WaterServer.updateWatertankLevels(id, rest);
+                const data = await res.json();
+                if (data.message === 'Success') {
+                    setWTL(initialState);
+                    navigate('/water');
+                }
+                alert('Registro actualizado correctamente');
+            } else {
+                // Si no existe ID, crear un nuevo registro
+                const res = await WaterServer.registerWatertankLevels(WaterTankLevels);
+                const data= await res.json();
+                if(data.message==="Success"){
+                    setWTL(initialState);
+                }
+                alert('Nuevo registro creado correctamente');
+                navigate('/water');
             }
-            navigate('/water');
-        }catch(error){
+        } catch (error) {
+            alert('Error al guardar los datos');
             console.log(error);
-        };
+        }
     };
 
-    const getWaterTanklevel = async (WTID) =>{
+    const getWTL = async (WTID) =>{
         try{
             const res = await WaterServer.getWatertankLevel(WTID);
+            console.log(res);
             const data = await res.json();
-            const {nivel_maximo,nivel_minimo,altura,diametro} = data.WaterTankLevels;
-            setWTL((prevState) => ({...prevState, nivel_maximo,nivel_minimo,altura,diametro,}));
+            const {id,nivel_maximo,nivel_minimo,altura,diametro} = data.tanklevel;
+            setWTL((prevState) => ({... prevState, id,nivel_maximo,nivel_minimo,altura,diametro}));
         }catch(error){
             console.log(error);
         }
     };
+    
     useEffect(() => {
         if(params.id){
-            getWaterTanklevel(params.id);
+            getWTL(params.id);
         }
         // eslint-disable-next-line
     }, []);
+    
+    console.log(WaterTankLevels);
 
     return(
         <div className="row">
@@ -57,7 +75,7 @@ const WTForm = () => {
                     <form onSubmit={HandleSubmit}>
                         <div className="mb-3">
                             <label className="form-label">Nivel Máximo (%):</label>
-                            <input type="number" name="nivel_maximo" value={WaterTankLevels?.tanklevel?.nivel_maximo} onChange={HandleInputChange} className="form-control" required />
+                            <input type="number" name="nivel_maximo" value={WaterTankLevels.nivel_maximo} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Nivel Mínimo (%):</label>
@@ -72,6 +90,7 @@ const WTForm = () => {
                             <input type="number" step="0.1" name="diametro" value={WaterTankLevels.diametro} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="d-flex justify-content-evenly">
+                            <input type="hidden" name="id" value={WaterTankLevels.id} onChange={HandleInputChange} className="form-control" required />
                             <button type="submit" className="btn btn-primary">Submit</button>
                             <a type="button" className="btn btn-secondary" href="/water">Return</a>
                         </div>
