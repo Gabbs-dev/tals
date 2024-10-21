@@ -1,4 +1,4 @@
-const API_URL="http://127.0.0.1:8000/api/timer/";
+const API_URL="http://127.0.0.1:8000/api/lights/timer/";
 
 export const getTimersList = async () => {
     return await fetch(API_URL);
@@ -8,7 +8,7 @@ export const getTimer = async (TimerID) => {
     return await fetch(`${API_URL}${TimerID}`);
 };
 
-export const registertimer = async (newTimer) => {
+export const registerTimer = async (newTimer) => {
     return await fetch(API_URL, {
         method: 'POST',
         headers:{

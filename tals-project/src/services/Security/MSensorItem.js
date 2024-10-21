@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from "react";
 import * as MSensorServer from './MSensorServer';
+import {NotificationProvider} from '../../Header/Notifications/NotificationServer';
 
 const MSensorItem = () => {
     const [Activity, setActivity] = useState([]);
@@ -16,7 +17,7 @@ const MSensorItem = () => {
     };
     useEffect(() => {
         actualState();
-        // Actualizar cada 5 segundos (ajusta el intervalo según tus necesidades)
+        // Actualizar cada 1 segundos (ajusta el intervalo según tus necesidades)
         const interval = setInterval(actualState, 1000);
         // Limpiar el intervalo cuando el componente se desmonte
         return () => clearInterval(interval);

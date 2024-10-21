@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNotification } from './NotificationServer'; // Ajusta la ruta según tu estructura
 
 const NotificationItem = () => {

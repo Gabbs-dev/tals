@@ -33,20 +33,21 @@ root.render(
             <div className="container my-4">
                 <Routes>       
                     <Route exact path='/' Component={Dashboard} />
-                    <Route path='/devices' Component={DevicesList} />
-                    <Route path='/users' Component={UsersList} />
-                    <Route path='/users/register' Component={UsersForm} />
+                    <Route path='/devices/' Component={DevicesList} />
+                    <Route path='/users/' Component={UsersList} />
+                    <Route path='/users/register/' Component={UsersForm} />
                     <Route path='/users/update/:id' Component={UsersForm} />
-                    <Route path='/lights' Component={LightsList} />
-                    <Route path='/lights/config' Component={LightsForm} />
+                    <Route path='/lights/' Component={LightsList} />
+                    <Route path='/lights/config/' Component={LightsForm} />
                     <Route path='/lights/config/:id' Component={LightsForm} />
-                    <Route path='/water' Component={WTList} />
-                    <Route path='/water/tanklevelconfig' Component={WTForm} />
+                    <Route path='/water/' Component={WTList} />
+                    <Route path='/water/tanklevelconfig/' Component={WTForm} />
                     <Route path='/water/tanklevelconfig/:id' Component={WTForm} />
-                    <Route path='/water/sprayconfig' Component={SprayForm} />
+                    <Route path='/water/sprayconfig/' Component={SprayForm} />
                     <Route path='/water/sprayconfig/:id' Component={SprayForm} />
-                    <Route path='/thermostat' Component={ThermList} />
-                    <Route path='/thermostat/config' Component={ThermForm} />
+                    <Route path='/thermostat/' Component={ThermList} />
+                    <Route path='/thermostat/config/' Component={ThermForm} />
+                    <Route path='/thermostat/config/:id' Component={ThermForm} />
                     <Route path='/security/' Component={SecurityList} />
                 </Routes>
             </div>

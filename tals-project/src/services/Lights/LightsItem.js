@@ -25,15 +25,10 @@ const LightItem = () => {
 
     const handleClick = async (buttonName) => {
         try {
-            // Extraer el número de luz del nombre del botón
             const lightNumber = buttonName.slice(3);
-            // Crear una copia del estado actual de Luminaria {luz1: 1, ...}
             const newLuminariaState = { ...Luminaria.lastLight };
-            // Actualizar el estado del relé modificado (0 para apagado, 1 para encendido)
             newLuminariaState[`luz${lightNumber}`] = newLuminariaState[`luz${lightNumber}`] === 0 ? 1 : 0;
-            // Enviar la solicitud POST con todos los estados
             const response = await LightsServer.createLightState(newLuminariaState);
-            console.log(response);
             if (response.ok) {
             setLuminaria({ ...Luminaria, lastLight: newLuminariaState });
             } else {
@@ -54,8 +49,6 @@ const LightItem = () => {
                 return 'N/A';
         };
     };
-
-    console.log(Luminaria);
 
     return(
         <div className="row">

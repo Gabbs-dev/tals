@@ -1,16 +1,21 @@
 ﻿import React from 'react';
 import NotificationItem from './Notifications/NotificationItem';
+import { useNotification } from './Notifications/NotificationServer';
 import { Offcanvas, Collapse, Dropdown } from 'bootstrap';
+import AlertsItem from './Notifications/Alerts/AlertsItem';
 
 const Header = () => {
+    const { notifications } = useNotification();
+
     return(
         <header>
-            <nav className="navbar navbar-dark bg-black">
+            <nav className="navbar navbar-dark bg-black md-4">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="/">TALS</a>
                     <div className='me-auto'>
                         <NotificationItem/>
                     </div>
+                    {notifications.length > 0 && <AlertsItem/>}
                     <button className="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
                         <i className="bi bi-list" />
                     </button>

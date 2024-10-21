@@ -37,16 +37,15 @@ DHT dht(DHTPIN, DHTTYPE);
 int vrele = 0, vrele2 = 0, vrele3 = 0, vrele4 = 0, vrele5 = 0, vrele6 = 0, vmotx = 0, vmoty = 40, pos, pos1, pos2, pos3, pos4, pos5, pos6;
 String cad, cad1, cad2, cad3, cad4, cad5, cad6, cad7, cad8;
 
-// Pines del joystick
-const int joystickXPin = A0; // Eje x
-const int joystickYPin = A1; // Eje y
-
-// Valores del joystick
-int joystickXValue, joystickYValue;
-
 // Tamaño del buffer JSON (ajuste según la cantidad de datos)
 const size_t capacity = JSON_OBJECT_SIZE(12) + 10;
 DynamicJsonDocument doc(capacity);
+
+// Movimiento automático
+bool modo_automatico = false;
+const int velocidad = 50; // Ajusta la velocidad del movimiento (ms)
+const int angulo_min = 10;
+const int angulo_max = 170;
 
 // Switch de tareas
 enum Modo {
@@ -79,18 +78,6 @@ void setup() {
 }
 
 void loop() {
-  // Leer valores del joystick
-  joystickXValue = analogRead(joystickXPin);
-  joystickYValue = analogRead(joystickYPin);
-
-  // Mapear valores del joystick a ángulos de los servos (ajusta los valores según sea necesario)
-  int servoXAngle = map(joystickXValue, 100, 923, -90, 90) + 90;
-  int servoYAngle = map(joystickYValue, 100, 923, -50, 50) + 40;
-
-  // Establecer posiciones de los servos según el joystick
-  motx.write(constrain(servoXAngle, 0, 180));  // Limitar el ángulo a 0-180 grados
-  moty.write(constrain(servoYAngle, 0, 180));  // Limitar el ángulo a 0-180 grados
-  
   switch (modo_actual) {
     case ENVIAR:
       enviarDatos();
@@ -175,6 +162,7 @@ void recibirComandos(){
     cad6 = cad.substring(pos4 + 1, pos5);  // Valor para el relé 6
     cad7 = cad.substring(pos5 + 1, pos6);  // Valor para el servomotor x
     cad8 = cad.substring(pos6 + 1);        // Valor para el servomotor y
+    
     //Ejecucion de las ordenes
     if(vrele != cad1.toInt()){
       vrele = cad1.toInt();  

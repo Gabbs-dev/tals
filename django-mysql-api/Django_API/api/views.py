@@ -180,21 +180,6 @@ class LuminariaView(View):
         luz_values = [jd.get(f'luz{i}') for i in range(1, 7)]
         return self._process_lights(luz_values)
 
-    def put(self, request, id):
-        jd = json.loads(request.body)
-        try:
-            light = Luminaria.objects.get(id=id)
-            self._update_light(light, jd)
-            return JsonResponse({'message': "Success"})
-        except Luminaria.DoesNotExist:
-            return JsonResponse({'message': "Light not found"})
-
-    def delete(self, request, id):
-        if Luminaria.objects.filter(id=id).exists():
-            Luminaria.objects.filter(id=id).delete()
-            return JsonResponse({'message': "Success"})
-        return JsonResponse({'message': "Light not found"})
-
     # Métodos auxiliares
     def _get_single_light(self, id):
         light = Luminaria.objects.filter(id=id).values().first()
@@ -247,12 +232,6 @@ class LuminariaView(View):
             return comando
         return ""
 
-    def _update_light(self, light, data):
-        light.ubicacion = data.get('ubicacion', light.ubicacion)
-        light.estado = data.get('estado', light.estado)
-        light.auto_encendido = data.get('auto_encendido', light.auto_encendido)
-        light.auto_apagado = data.get('auto_apagado', light.auto_apagado)
-        light.save()
 class RegadoView(View):
 
     @method_decorator(csrf_exempt)
@@ -446,7 +425,6 @@ class TermostatoView(View):
                     'id': last_thermostat.id,
                     'temperatura': last_thermostat.temperatura,
                     'humedad': last_thermostat.humedad,
-                    'temperatura_deseada': last_thermostat.temperatura_deseada,
                     'date': last_thermostat.date,
                 }
                 datos = {'message': "Success", 'Thermostat': data}
@@ -1202,54 +1180,155 @@ class TanqueaguaNivelesView(View):
             datos= {'message': "tanklevel not found"}
         return JsonResponse(datos)
 
-
-class TemporizadorView(View):
+class TermostatoNivelesView(View): 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs) :
         return super().dispatch(request, *args, **kwargs)
     
     def get(self, request, id=0):
         if(id>0):
-            events=list(Temporizador.objects.filter(id=id).values())
+            events=list(TermostatoNiveles.objects.filter(id=id).values())
             if len(events) > 0:
                 event=events[0]
-                datos = {'message': "Success", 'timer': event}
+                datos = {'message': "Success", 'thermLevel': event}
             else:
-                datos= {'message': "timer not found"}
+                datos= {'message': "thermLevel not found"}
             return JsonResponse(datos)
         else:
-            events= list(Temporizador.objects.values())
+            events= list(TermostatoNiveles.objects.values())
             if len(events)>0:
-                datos= {'message': "Success",'timer':events}
+                datos= {'message': "Success",'thermsLevel':events}
             else:
-                datos= {'message': "timer not found"}
+                datos= {'message': "thermsLevel not found"}
             return JsonResponse(datos) 
 
     def post(self, request):
         jd = json.loads(request.body)
-        TanqueAguaNiveles.objects.create(dispositivo=jd['dispositivo'],horario_inicio=jd['horario_inicio'],horario_cierre=jd['horario_cierre'])
+        TermostatoNiveles.objects.create(dispositivo=jd['dispositivo'],temperatura_deseada=jd['temperatura_deseada'])
         datos= {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
         jd = json.loads(request.body)
-        events= list(Temporizador.objects.filter(id=id).values())
+        events= list(TermostatoNiveles.objects.filter(id=id).values())
         if len(events) > 0:
-            event= TanqueAguaNiveles.objects.get(id=id)
+            event= TermostatoNiveles.objects.get(id=id)
+            event.dispositivo= jd['dispositivo']
+            event.temperatura_deseada= jd['temperatura_deseada']
+            event.save()
+            datos= {'message': "Success"}
+        else:
+            datos= {'message': "thermLevel not found"}
+        return JsonResponse(datos)
+
+    def delete(self, request, id):
+        events= list(TermostatoNiveles.objects.filter(id=id).values())
+        if len(events) > 0:
+            TermostatoNiveles.objects.filter(id=id).delete()
+            datos= {'message': "Success"}
+        else:
+            datos= {'message': "thermLevel not found"}
+        return JsonResponse(datos)
+
+
+class TemporizadorLuminariasView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs) :
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, id=0):
+        if(id>0):
+            events=list(TemporizadorLuminarias.objects.filter(id=id).values())
+            if len(events) > 0:
+                event=events[0]
+                datos = {'message': "Success", 'timerLight': event}
+            else:
+                datos= {'message': "timer light not found"}
+            return JsonResponse(datos)
+        else:
+            events= list(TemporizadorLuminarias.objects.values())
+            if len(events)>0:
+                datos= {'message': "Success",'timerLights':events}
+            else:
+                datos= {'message': "timer lights not found"}
+            return JsonResponse(datos) 
+
+    def post(self, request):
+        jd = json.loads(request.body)
+        TemporizadorLuminarias.objects.create(dispositivo=jd['dispositivo'],horario_inicio=jd['horario_inicio'],horario_cierre=jd['horario_cierre'])
+        datos= {'message': "Success"}
+        return JsonResponse(datos)
+
+    def put(self, request, id):
+        jd = json.loads(request.body)
+        events= list(TemporizadorLuminarias.objects.filter(id=id).values())
+        if len(events) > 0:
+            event= TemporizadorLuminarias.objects.get(id=id)
             event.dispositivo= jd['dispositivo']
             event.horario_inicio= jd['horario_inicio']
             event.horario_cierre= jd['horario_cierre']
             event.save()
             datos= {'message': "Success"}
         else:
-            datos= {'message': "Timer not found"}
+            datos= {'message': "timer light not found"}
         return JsonResponse(datos)
 
     def delete(self, request, id):
-        events= list(Temporizador.objects.filter(id=id).values())
+        events= list(TemporizadorLuminarias.objects.filter(id=id).values())
         if len(events) > 0:
             Temporizador.objects.filter(id=id).delete()
             datos= {'message': "Success"}
         else:
-            datos= {'message': "timer not found"}
+            datos= {'message': "timer light not found"}
+        return JsonResponse(datos)
+
+class TemporizadorRegadoView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs) :
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, id=0):
+        if(id>0):
+            events=list(TemporizadorRegado.objects.filter(id=id).values())
+            if len(events) > 0:
+                event=events[0]
+                datos = {'message': "Success", 'timerSpray': event}
+            else:
+                datos= {'message': "timer spray not found"}
+            return JsonResponse(datos)
+        else:
+            events= list(TemporizadorRegado.objects.values())
+            if len(events)>0:
+                datos= {'message': "Success",'timerSprays':events}
+            else:
+                datos= {'message': "timer sprays not found"}
+            return JsonResponse(datos) 
+
+    def post(self, request):
+        jd = json.loads(request.body)
+        TemporizadorRegado.objects.create(dispositivo=jd['dispositivo'],horario_inicio=jd['horario_inicio'],horario_cierre=jd['horario_cierre'])
+        datos= {'message': "Success"}
+        return JsonResponse(datos)
+
+    def put(self, request, id):
+        jd = json.loads(request.body)
+        events= list(TemporizadorRegado.objects.filter(id=id).values())
+        if len(events) > 0:
+            event= TemporizadorRegado.objects.get(id=id)
+            event.dispositivo= jd['dispositivo']
+            event.horario_inicio= jd['horario_inicio']
+            event.horario_cierre= jd['horario_cierre']
+            event.save()
+            datos= {'message': "Success"}
+        else:
+            datos= {'message': "timer spray not found"}
+        return JsonResponse(datos)
+
+    def delete(self, request, id):
+        events= list(TemporizadorRegado.objects.filter(id=id).values())
+        if len(events) > 0:
+            Temporizador.objects.filter(id=id).delete()
+            datos= {'message': "Success"}
+        else:
+            datos= {'message': "timer spray not found"}
         return JsonResponse(datos)

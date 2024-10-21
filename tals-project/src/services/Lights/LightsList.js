@@ -1,8 +1,38 @@
 ﻿import LightItem from './LightsItem';
 import LightsChart from '../../Charts/LightsChart';
-// import DynamicLight from '../Arduino/ard_commands';
+import { useEffect, useState } from "react";
+import * as LightTimer from './Timer/LightTimer'
 
 const LightsList = () => {
+    const [timersData, setTimersData] = useState([]);
+    const [showConfigButton, setShowConfigButton] = useState(false);
+    const [showEditButtons, setShowEditButtons] = useState(false);
+
+
+    const fetchData = async () => {
+        try {
+            const response = await LightTimer.getTimersList();
+            const data = await response.json();
+            setTimersData(data);
+        } catch (error) {
+            console.error('Error fetching timers data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+        // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => {
+        if (timersData && timersData.timerLights) {
+            setShowConfigButton(false); // Ocultar botón de configurar si hay registros
+            setShowEditButtons(true); // Mostrar botones de editar y eliminar
+        } else {
+            setShowConfigButton(true); // Mostrar botón de configurar si no hay registros
+            setShowEditButtons(false); // Ocultar botones de editar y eliminar
+        }
+    }, [timersData]);
 
     return (
         <div className='row'>
@@ -24,43 +54,45 @@ const LightsList = () => {
             <h2 className='display-6 mt-5'>Configuracion</h2>
             <hr className='divider'/>
             <div className="card text-bg-light">
-                <div className="d-flex align-items-center justify-content-between card-header">
-                    <h4>Resumen Global</h4>
-                    <a className='btn btn-primary' href="/lights/config">Configurar Dispositivo</a>
+                <div className="d-flex justify-content-between card-header">
+                    <h4>Interruptor Automático</h4>
+                    {showConfigButton && (
+                        <a className='btn btn-primary' href="/lights/config/">Configurar Dispositivo</a>
+                    )}
                 </div>    
                 <div className="card-body">
-                    <table class="table table-striped">
+                    <table className="table table-striped text-center">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Ubicacion</th>
-                                <th scope="col">Actividad</th>
-                                <th scope="col">Encendido Automático</th>
-                                <th scope="col">Apagado Automático</th>
+                                <th scope="col">Dispositivo</th>
+                                <th scope="col">Auto ON</th>
+                                <th scope="col">Auto OFF</th>
+                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
+                        {timersData?.timerLights?.length > 0 ? ( 
+                            timersData.timerLights.map((timer) => {
+                                return(
+                                    <tr key={timer.id}>
+                                        <th scope="row">{timer.id}</th>
+                                        <td>{timer.dispositivo}</td>
+                                        <td>{timer.horario_inicio}</td>
+                                        <td>{timer.horario_cierre}</td>
+                                        <td>
+                                            {showEditButtons && (
+                                                <a className="btn btn-sm btn-warning" href={'/lights/config/'+(timer.id)}><i className="bi bi-pencil"/></a>
+                                            )}
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        ) : (
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Oficina</td>
-                                <td>Activo</td>
-                                <td>07:00</td>
-                                <td>12:00</td>
+                                <td className="text-center" colSpan="5">Data not found</td>    
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Sala Principal</td>
-                                <td>Inactivo</td>
-                                <td>16:00</td>
-                                <td>20:00</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Entrada</td>
-                                <td>Inactivo</td>
-                                <td>20:00</td>
-                                <td>22:00</td>
-                            </tr>
+                        )}
                         </tbody>
                     </table>
                 </div>

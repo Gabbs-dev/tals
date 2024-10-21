@@ -2,82 +2,97 @@
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 
-import * as SprayServer from './SprayServer';
+import * as SprayTimer from './Timer/SprayTimer';
 
 const SprayForm = () => {
 
     const navigate = useNavigate();
     const params = useParams();
 
-    const initialState={id:0,nivel_agua:"0",nivel_max:"0.0",nivel_min:"0.0",date:""};
-    const [Spray, setSpray]= useState(initialState);
+    const initialState={id:0,dispositivo:"",horario_inicio:"",horario_cierre:""};
+    const [Lights, setLights]= useState(initialState);
 
     const HandleInputChange = (e) =>{
-        setSpray({...Spray,[e.target.name]:e.target.value});
+        setLights({...Lights,[e.target.name]:e.target.value});
     };
 
-    const HandleSubmit = async (e) =>{
+    const HandleSubmit = async (e) => {
         e.preventDefault();
-        try{
-            let res;
-            res= await SprayServer.registerSpray(Spray);
-            const data= await res.json();
-            //console.log(data);
-            if(data.message==="Success"){
-                setSpray(initialState);
+        try {
+            const { id, ...rest } = Lights;
+            if (id) {
+                // Si existe un ID, actualizar el registro
+                const res = await SprayTimer.updateTimer(id, rest);
+                const data = await res.json();
+                if (data.message === 'Success') {
+                    setLights(initialState);
+                    navigate('/water');
+                }
+                alert('Registro actualizado correctamente');
+            } else {
+                // Si no existe ID, crear un nuevo registro
+                const res = await SprayTimer.registerTimer(Lights);
+                const data= await res.json();
+                if(data.message==="Success"){
+                    setLights(initialState);
+                }
+                alert('Nuevo registro creado correctamente');
+                navigate('/water');
             }
-            navigate('/water');
-        }catch(error){
+        } catch (error) {
+            alert('Error al guardar los datos');
             console.log(error);
-        };
+        }
     };
 
-    const getSprayItem = async (SprayID) =>{
+    const getLight = async (LightID) =>{
         try{
-            const res = await SprayServer.getSpray(SprayID);
+            const res = await SprayTimer.getTimer(LightID);
             const data = await res.json();
-            const {nivel_agua,nivel_max,nivel_min,date}= data.SprayID;
-            setSpray({nivel_agua,nivel_max,nivel_min,date});
+            const {id,dispositivo,horario_inicio,horario_cierre}= data.timerSpray;
+            setLights((prevState) => ({... prevState, id,dispositivo,horario_inicio,horario_cierre}));
         }catch(error){
             console.log(error);
         }
     };
     useEffect(() => {
         if(params.id){
-            getSprayItem(params.id);
+            getLight(params.id);
         }
         // eslint-disable-next-line
     }, []);
 
+    console.log(Lights);
+
     return(
         <div className="row">
-            <h2 className="display-6 text-center">Regado / Configuración</h2>
+            <h2 className="display-6 text-center">Regado / Configuracion</h2>
             <hr className="divider"/>
-            <div className="d-flex flex-row justify-content-center">
+            <div className="d-flex flex-row justify-content-center mt-2">
                 <div className="d-flex flex-column">
                     <form onSubmit={HandleSubmit}>
                         <div className="mb-3">
-                            <input type="hidden" step="0.1" name="nivel_agua" value={Spray.nivel_agua} onChange={HandleInputChange} className="form-control" />
+                            <label className="form-label">Nombre de dispositivo</label>
+                            <input type="text" name="dispositivo" placeholder="Ej: Aspersor Jardin" value={Lights.dispositivo} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Nivel Máximo:</label>
-                            <input type="number" step="0.1" name="nivel_max" value={Spray.nivel_max} onChange={HandleInputChange} className="form-control" required />
+                            <label className="form-label">Encendido Automático:</label>
+                            <input type="time" step="00:00:00" name="horario_inicio" value={Lights.horario_inicio} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Nivel Mínimo:</label>
-                            <input type="number" step="0.1" name="nivel_min" value={Spray.nivel_min} onChange={HandleInputChange} className="form-control" required />
+                            <label className="form-label">Apagado Automático:</label>
+                            <input type="time" name="horario_cierre" value={Lights.horario_cierre} onChange={HandleInputChange} className="form-control" required />
                         </div>
-                        <div className="mb-3">
-                            <input type="hidden" name="date" value={Spray.date} onChange={HandleInputChange} className="form-control" />
-                        </div>
-                        <div className="d-flex justify-content-evenly">
+                        <div className="d-flex flex-row justify-content-evenly">
+                            <input type="hidden" name="id" value={Lights.id} onChange={HandleInputChange} className="form-control" required />
                             <button type="submit" className="btn btn-primary">Submit</button>
                             <a type="button" className="btn btn-secondary" href="/water">Return</a>
                         </div>
                     </form>
                 </div>
             </div>
-        </div>    
+        </div>
+        
     )
 };
 

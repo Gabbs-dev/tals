@@ -144,8 +144,6 @@ class MonitoreroServicioHasTermostato(models.Model):
 class Regado(models.Model):
     estado = models.CharField(max_length=45, blank=True, null=True)
     nivel_humedad = models.IntegerField(blank=True, null=True)
-    auto_riego_inicio = models.TimeField(blank=True, null=True)
-    auto_riego_cierre = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -211,25 +209,41 @@ class TanqueAguaNiveles(models.Model):
         db_table = 'tanque_agua_niveles'
 
 
-class Temporizador(models.Model):
+class TemporizadorLuminarias(models.Model):
     dispositivo = models.CharField(max_length=50, blank=True, null=True)
     horario_inicio = models.TimeField(blank=True, null=True)
     horario_cierre = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'temporizador'
+        db_table = 'temporizador_luminaria'
+
+class TemporizadorRegado(models.Model):
+    dispositivo = models.CharField(max_length=50, blank=True, null=True)
+    horario_inicio = models.TimeField(blank=True, null=True)
+    horario_cierre = models.TimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'temporizador_regado'
 
 
 class Termostato(models.Model):
-    temperatura = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True)
+    temperatura = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     humedad = models.IntegerField(blank=True, null=True)
-    temperatura_deseada = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'termostato'
+
+class TermostatoNiveles(models.Model):
+    dispositivo = models.CharField(max_length=50, blank=True, null=True)
+    temperatura_deseada = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'termostato_niveles'
 
 
 class TermostatoHasEvento(models.Model):

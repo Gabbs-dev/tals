@@ -8,12 +8,6 @@ export const getLight = async (LightID) => {
     return await fetch(`${API_URL}${LightID}`);
 };
 
-export const deleteLight = async (LightID) => {
-    return await fetch(`${API_URL}${LightID}`, {
-        method: 'DELETE',
-    });
-};
-
 export const createLightState = async (data) => {
     return await fetch(API_URL,{
         method: 'POST',
@@ -27,6 +21,18 @@ export const createLightState = async (data) => {
             "luz4":Number(data.luz4),
             "luz5":Number(data.luz5),
             "luz6":Number(data.luz6),
+        })
+    }); console.log(data);
+};
+
+export const autoLightState = async (data) => {
+    return await fetch(API_URL,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            data
         })
     }); console.log(data);
 };
