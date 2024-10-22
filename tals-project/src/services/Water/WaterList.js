@@ -39,59 +39,59 @@ const WTList = () => {
             <hr className='divider'/>
             <h2 className='display-6 mt-5'>Nivel de Agua / Actividad</h2>
             <hr className='divider'/>
-            <div className="col-md-4">
+            <div className="col-md-6">
                 <WTItem/>
-            </div>
-            <div className="col-md-8">
-                <div className="card text-bg-light">
-                <div className="card-header">Resumen Global / Uso de Agua</div>
+                <h2 className='display-6 mt-3'>Configuración</h2>
+                <hr className='divider'/>
+                <div className="card text-bg-light mt-3">
+                    <div className="d-flex aling-items-center justify-content-between card-header">
+                        <h4>Dispositivos</h4>
+                        {showConfigButton && (
+                            <a className='btn btn-primary' href="/water/tanklevelconfig/">Configurar Dispositivo</a>
+                        )}
+                    </div>
                     <div className="card-body">
-                        <WaterChart/>
+                        <table class="table table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nivel Maximo</th>
+                                    <th scope="col">Nivel Minimo</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {TALevels?.tanklevel ? (
+                                <tr key={TALevels?.tanklevel?.id}>
+                                    <td>{TALevels?.tanklevel?.nivel_maximo}</td>
+                                    <td>{TALevels?.tanklevel?.nivel_minimo}</td>
+                                    <td>
+                                        {showEditButtons && (
+                                            <a className="btn btn-sm btn-warning" href={'/water/tanklevelconfig/'+(TALevels?.tanklevel?.id)}><i className="bi bi-pencil"/></a>
+                                        )}
+                                    </td>
+                                </tr>
+                            ) : (
+                                <tr>
+                                    <td className="text-center" colSpan="4">Data not found</td>    
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <h2 className='display-6 mt-3'>Nivel de Agua / Configuración</h2>
-            <hr className='divider'/>
-            <div className="card text-bg-light mt-3">
-                <div className="d-flex aling-items-center justify-content-between card-header">
-                    <h4>Dispositivos</h4>
-                    {showConfigButton && (
-                        <a className='btn btn-primary' href="/water/tanklevelconfig/">Configurar Dispositivo</a>
-                    )}
+            <div className="col-md-6">
+                <div className="card text-bg-light">
+                    <div className="card-header">Nivel Actual de Agua</div>
+                    <div className="card-body">
+                        Grafica kawaii
+                    </div>
                 </div>
-                <div className="card-body">
-                    <table class="table table-striped text-center">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Nivel Maximo</th>
-                                <th scope="col">Nivel Minimo</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {TALevels?.tanklevel?.length > 0 ? (
-                            TALevels.tanklevel.map((level) => {
-                                return(
-                                    <tr key={level.id}>
-                                        <th scope="row">{level.id}</th>
-                                        <td>{level.nivel_maximo}</td>
-                                        <td>{level.nivel_minimo}</td>
-                                        <td>
-                                            {showEditButtons && (
-                                                <a className="btn btn-sm btn-warning" href={'/water/tanklevelconfig/'+(level.id)}><i className="bi bi-pencil"/></a>
-                                            )}
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        ) : (
-                            <tr>
-                                <td className="text-center" colSpan="4">Data not found</td>    
-                            </tr>
-                        )}
-                        </tbody>
-                    </table>
+                <div className="card text-bg-light mt-3">
+                    <div className="card-header">Resumen Global / Uso de Agua</div>
+                    <div className="card-body">
+                        <WaterChart/>
+                    </div>
                 </div>
             </div>
             <SprayList/>

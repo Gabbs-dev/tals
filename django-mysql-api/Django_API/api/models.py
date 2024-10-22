@@ -7,7 +7,6 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-
 class Camaras(models.Model):
     ubicacion = models.CharField(max_length=45, blank=True, null=True)
     estado = models.CharField(max_length=45, blank=True, null=True)

@@ -1143,9 +1143,15 @@ class TanqueaguaNivelesView(View):
                 datos= {'message': "tanklevel not found"}
             return JsonResponse(datos)
         else:
-            events= list(TanqueAguaNiveles.objects.values())
-            if len(events)>0:
-                datos= {'message': "Success",'tanklevel':events}
+            events= TanqueAguaNiveles.objects.order_by('id').last()
+            if events:
+                data = {
+                    'nivel_maximo': events.nivel_maximo,
+                    'nivel_minimo': events.nivel_minimo,
+                    'altura': events.altura,
+                    'diametro': events.diametro,
+                }
+                datos= {'message': "Success",'tanklevel':data}
             else:
                 datos= {'message': "tanklevel not found"}
             return JsonResponse(datos) 
@@ -1195,11 +1201,16 @@ class TermostatoNivelesView(View):
                 datos= {'message': "thermLevel not found"}
             return JsonResponse(datos)
         else:
-            events= list(TermostatoNiveles.objects.values())
-            if len(events)>0:
-                datos= {'message': "Success",'thermsLevel':events}
+            events= TermostatoNiveles.objects.order_by('id').last()
+            if events:
+                data = {
+                    'id': events.id,
+                    'dispositivo': events.dispositivo,
+                    'temperatura_deseada': events.temperatura_deseada,
+                }
+                datos = {'message': "Success",'thermLevel':data}
             else:
-                datos= {'message': "thermsLevel not found"}
+                datos = {'message': "thermsLevel not found"}
             return JsonResponse(datos) 
 
     def post(self, request):
@@ -1246,11 +1257,17 @@ class TemporizadorLuminariasView(View):
                 datos= {'message': "timer light not found"}
             return JsonResponse(datos)
         else:
-            events= list(TemporizadorLuminarias.objects.values())
-            if len(events)>0:
-                datos= {'message': "Success",'timerLights':events}
+            events= TemporizadorLuminarias.objects.order_by('id').last()
+            if events:
+                data = {
+                    'id': events.id,
+                    'dispositivo': events.dispositivo,
+                    'horario_inicio': events.horario_inicio,
+                    'horario_cierre': events.horario_cierre,
+                }
+                datos= {'message': "Success",'timerLight':data}
             else:
-                datos= {'message': "timer lights not found"}
+                datos= {'message': "timer light not found"}
             return JsonResponse(datos) 
 
     def post(self, request):

@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect, useRef, useContext, useCallb
 import * as MSensorServer from '../../services/Security/MSensorServer';
 import * as TimerLight from '../../services/Lights/Timer/LightTimer';
 import * as TimerSpray from '../../services/Water/Timer/SprayTimer';
+import * as LevelsTherm from '../../services/Therm/Levels/ThermLevels';
+import * as StatusTherm from '../../services/Therm/ThermServer';
 import { addEventListener } from '../../Worker/worker';
 
 // Crear el contexto de notificaciones
@@ -43,9 +45,29 @@ export const NotificationProvider = ({ children }) => {
         }
     };
 
+    const ThermostatLevels = async () => {
+        try{
+            const levels = await LevelsTherm.getLevelsList();
+            const dataLevels = await levels.json();
+            const status = await StatusTherm.getLastThermostat();
+            const dataStatus = await status.json();
+            if (dataLevels.message === "Success" && dataStatus.message === "Success") {
+                const t_level = dataLevels.thermLevel.temperatura_deseada;
+                const t_status = dataStatus.Thermostat.temperatura;
+                if (t_status !== t_level) {
+                    addNotification('Termostato: La temperatura actual no es la deseada por el usuario.', "success");
+                }
+            } else {
+                console.log({'message':'No hay parametros establecidos'});
+            }
+        } catch (error) {
+            console.error('Error al obtener los parametros:', error);
+        }
+    };
+
     const LightTime = async () => {
         try {
-            const response = await TimerLight.getTimer(1);
+            const response = await TimerLight.getTimersList();
             const data = await response.json();
             const now = new Date();
             const time = now.getHours() + ':' + now.getMinutes();
@@ -92,14 +114,17 @@ export const NotificationProvider = ({ children }) => {
         actualState();
         LightTime();
         SprayTime();
+        ThermostatLevels();
         // Actualizar cada 1 segundos (ajusta el intervalo según tus necesidades)
         const interval = setInterval(actualState, 1000);
         const interval_light = setInterval(LightTime, 60000);
         const interval_spray = setInterval(SprayTime, 60000);
+        const interval_therm = setInterval(ThermostatLevels, 60000);
         // Limpiar el intervalo cuando el componente se desmonte
         return () => clearInterval(interval);
         return () => clearInterval(interval_light);
         return () => clearInterval(interval_spray);
+        return () => clearInterval(interval_therm);
         // eslint-disable-next-line
     }, [] );
 

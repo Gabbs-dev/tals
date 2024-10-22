@@ -25,7 +25,7 @@ const ThermList = () => {
     }, []);
 
     useEffect(() => {
-        if (levelsData && levelsData.thermsLevel) {
+        if (levelsData && levelsData.thermLevel) {
             setShowConfigButton(false); // Ocultar botón de configurar si hay registros
             setShowEditButtons(true); // Mostrar botones de editar y eliminar
         } else {
@@ -71,21 +71,17 @@ const ThermList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                        {levelsData?.thermsLevel?.length > 0 ? ( 
-                            levelsData.thermsLevel.map((level) => {
-                                return(
-                                    <tr key={level.id}>
-                                        <th scope="row">{level.id}</th>
-                                        <td>{level.dispositivo}</td>
-                                        <td>{level.temperatura_deseada}</td>
-                                        <td>
-                                            {showEditButtons && (
-                                                <a className="btn btn-sm btn-warning" href={'/thermostat/config/'+(level.id)}><i className="bi bi-pencil"/></a>
-                                            )}
-                                        </td>
-                                    </tr>
-                                )
-                            })
+                        {levelsData?.thermLevel ? ( 
+                            <tr key={levelsData?.thermLevel?.id}>
+                                <th scope="row">{levelsData?.thermLevel?.id}</th>
+                                <td>{levelsData?.thermLevel?.dispositivo}</td>
+                                <td>{levelsData?.thermLevel?.temperatura_deseada}</td>
+                                <td>
+                                    {showEditButtons && (
+                                        <a className="btn btn-sm btn-warning" href={'/thermostat/config/'+(levelsData?.thermLevel?.id)}><i className="bi bi-pencil"/></a>
+                                    )}
+                                </td>
+                            </tr>
                         ) : (
                             <tr>
                                 <td className="text-center" colSpan="4">Data not found</td>    

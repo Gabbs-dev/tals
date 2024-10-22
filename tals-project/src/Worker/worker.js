@@ -6,16 +6,28 @@ export const addEventListener = async (message,event) => {
     try{
       if (event === 'ON') {
         // Enviar comando a Django para encender luces
-        const order = {'autoLight' : 'ON'};
+        const order = {
+          'luz1' : 1,
+          'luz2' : 1,
+          'luz3' : 1,
+          'luz4' : 1,
+          'luz5' : 1,
+          'luz6' : 1,
+        };
         LightsServer.autoLightState(order);
-        console.log(order);
-        return order;
+        console.log({'message':'Success'}); 
       } else if (event === 'OFF') {
         // Enviar comando a Django para apagar luces
-        const order = {'autoLight' : 'OFF'};
+        const order = {
+          'luz1' : 0,
+          'luz2' : 0,
+          'luz3' : 0,
+          'luz4' : 0,
+          'luz5' : 0,
+          'luz6' : 0,
+        };
         LightsServer.autoLightState(order);
-        console.log(order);
-        return order;
+        console.log({'message':'Success'}); 
       }
     } catch(error){
       console.log('Ha ocurrido un error: ',error);

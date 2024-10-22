@@ -66,7 +66,6 @@ const LightItem = () => {
                         <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz1)}</strong></p>
                         <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
                         <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
-                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
                     </div>
                 </div>
                 <div className='d-flex flex-column'>
@@ -82,7 +81,6 @@ const LightItem = () => {
                         <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz2)}</strong></p>
                         <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
                         <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
-                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
                     </div>
                 </div>
             </div>
@@ -100,7 +98,6 @@ const LightItem = () => {
                         <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz3)}</strong></p>
                         <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
                         <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
-                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
                     </div>
                 </div>
                 <div className='d-flex flex-column'>
@@ -116,7 +113,6 @@ const LightItem = () => {
                         <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz4)}</strong></p>
                         <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
                         <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
-                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
                     </div>
                 </div>
             </div>
@@ -134,7 +130,6 @@ const LightItem = () => {
                         <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz5)}</strong></p>
                         <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
                         <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
-                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
                     </div>
                 </div>
                 <div className='d-flex flex-column'>
@@ -150,7 +145,6 @@ const LightItem = () => {
                         <p className="card-text my-3">Estado: <strong>{getEstadoLuz(Luminaria?.lastLight?.luz6)}</strong></p>
                         <p className="card-text">Encendido Automatico: <strong>{Luminaria?.lastLight?.auto_encendido || 'N/A'} </strong></p>
                         <p className="card-text">Apagado Automatico: <strong>{Luminaria?.lastLight?.auto_apagado || 'N/A'} </strong></p>
-                        <p className="card-text">Fecha: <strong>{Luminaria?.lastLight?.date || 'N/A'} </strong></p>
                     </div>
                 </div>
             </div>
