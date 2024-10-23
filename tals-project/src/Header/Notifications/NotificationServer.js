@@ -115,9 +115,7 @@ export const NotificationProvider = ({ children }) => {
         }
     };
 
-
-        
-
+    /*
     const handlePorcentajeChange = useCallback((nuevoPorcentaje) => {
         setPorcentaje(nuevoPorcentaje); // Guardar el porcentaje local en tiempo real
     }, []);
@@ -160,22 +158,22 @@ export const NotificationProvider = ({ children }) => {
     useEffect(() => {
         verificarYNotificar(); // Verificar cada vez que cambie el porcentaje local
     }, [porcentaje, verificarYNotificar]);
-    
+    */
+
     useEffect(() => {
-        fetchMaxWaterLevel();
+        //fetchMaxWaterLevel();
         actualState();
         LightTime();
         SprayTime();
         ThermostatLevels();
-        handlePorcentajeChange();
         // Actualizar intervalos por peirodos de tiempo (ajusta el intervalo según tus necesidades)
         const interval = setInterval(actualState, 1000);
         const interval_light = setInterval(LightTime, 15000);
         const interval_spray = setInterval(SprayTime, 15000);
         const interval_therm = setInterval(ThermostatLevels,1500);
-        const interval_fe = setInterval (fetchMaxWaterLevel,15000)
+        //const interval_fe = setInterval (fetchMaxWaterLevel,15000)
         // Limpiar el intervalo cuando el componente se desmonte
-        return () => clearInterval(interval,interval_light,interval_spray,interval_therm,interval_fe);
+        return () => clearInterval(interval,interval_light,interval_spray,interval_therm);
         // eslint-disable-next-line
     }, [] );
     
@@ -189,7 +187,7 @@ export const NotificationProvider = ({ children }) => {
         <NotificationContext.Provider value={{ addNotification, notifications }}>
             <div>
                 {children}
-                <WTItem onPorcentajeChange={handlePorcentajeChange} type='hidden' />
+                {/*}<WTItem onPorcentajeChange={handlePorcentajeChange} type='hidden' />{*/}
             </div>
         </NotificationContext.Provider>
     );

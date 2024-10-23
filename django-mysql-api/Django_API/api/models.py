@@ -9,11 +9,8 @@ from django.db import models
 
 class Camaras(models.Model):
     ubicacion = models.CharField(max_length=45, blank=True, null=True)
-    estado = models.CharField(max_length=45, blank=True, null=True)
-    posicion_x_inicio = models.FloatField(blank=True, null=True)
-    posicion_x_cierre = models.FloatField(blank=True, null=True)
-    posicion_y_inicio = models.FloatField(blank=True, null=True)
-    posicion_y_cierre = models.FloatField(blank=True, null=True)
+    posicion_x = models.IntegerField(blank=True, null=True)
+    posicion_y = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False

@@ -8,21 +8,15 @@ export const getCameraData = async (WTID) => {
     return await fetch(`${API_URL}${WTID}`);
 };
 
-export const registerCameraData = async (newWatertank) => {
+export const cameraPosition = async (position) => {
     return await fetch(API_URL, {
         method: 'POST',
         headers:{
             'Content-Type':'application/json',
         },
         body:JSON.stringify({
-            "nivel_maximo":Number(newWatertank.nivel_maximo),
-            "nivel_minimo":Number(newWatertank.nivel_minimo),
+            "posicion_x":Number(position.posicion_x),
+            "posicion_y":Number(position.posicion_y),
         })
-    });
-};
-
-export const deleteCamera = async (WTID) => {
-    return await fetch(`${API_URL}${WTID}`, {
-        method: 'DELETE',
     });
 };

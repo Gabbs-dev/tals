@@ -110,6 +110,7 @@ class MonitoreroServicioView(View):
         else:
             datos= {'message': "User not found"}
         return JsonResponse(datos)
+
 class CamarasView(View):
 
     @method_decorator(csrf_exempt)
@@ -126,44 +127,41 @@ class CamarasView(View):
                 datos= {'message': "Cameras not found"}
             return JsonResponse(datos)
         else:
-            cams= list(Camaras.objects.values())
-            if len(cams)>0:
-                datos= {'message': "Success",'Cameras':cams}
+            cams= Camaras.objects.order_by('id').last()
+            if cams:
+                data = {
+                    'id': cams.id,
+                    'posicion_x': cams.posicion_x,
+                    'posicion_y': cams.posicion_y,
+                }
+                datos= {'message': "Success",'lastCamera':data}
             else:
-                datos= {'message': "Cameras not found"}
+                datos= {'message': "Last Camera not found"}
             return JsonResponse(datos) 
 
     def post(self, request):
+        # Servos
         jd = json.loads(request.body)
-        Camaras.objects.create(ubicacion=jd['ubicacion'],estado=jd['estado'],posicion_x_inicio=jd['posicion_x_inicio'],posicion_x_cierre=jd['posicion_x_cierre'],posicion_y_inicio=jd['posicion_y_inicio'],posicion_y_cierre=jd['posicion_y_cierre'])
-        datos= {'message': "Success"}
-        return JsonResponse(datos)
+        posicion_x = jd['posicion_x']
+        posicion_y = jd['posicion_y']
+        ser_command = f"{posicion_x},{posicion_y}\n"
+        with serial.Serial('COM1', 9600) as ser:
+            data = ser.readline().decode('utf-8').strip()
+            if data:
+                jd = json.loads(data)
+                rele1 = jd['estado_rele1']
+                rele2 = jd['estado_rele2']
+                rele3 = jd['estado_rele3']
+                rele4 = jd['estado_rele4']
+                rele5 = jd['estado_rele5']
+                rele6 = jd['estado_rele6']
+                command = f"{rele1},{rele2},{rele3},{rele4},{rele5},{rele6},"
+                if command:
+                    command += ser_command
+                    ser.write(command.encode('utf-8'))
+                    return JsonResponse({'message': "Success"})
+            return JsonResponse({'message': "Error"})
 
-    def put(self, request, id):
-        jd = json.loads(request.body)
-        cams= list(Camaras.objects.filter(id=id).values())
-        if len(cams) > 0:
-            cam= Camaras.objects.get(id=id)
-            cam.ubicacion=jd['ubicacion']
-            cam.estado=jd['estado']
-            cam.posicion_x_inicio=jd['posicion_x_inicio']
-            cam.posicion_x_cierre=jd['posicion_x_cierre']
-            cam.posicion_y_inicio=jd['posicion_y_inicio']
-            cam.posicion_y_cierre=jd['posicion_y_cierre']
-            cam.save()
-            datos= {'message': "Success"}
-        else:
-            datos= {'message': "User not found"}
-        return JsonResponse(datos)
-
-    def delete(self, request, id):
-        cams= list(Camaras.objects.filter(id=id).values())
-        if len(cams) > 0:
-            Camaras.objects.filter(id=id).delete()
-            datos= {'message': "Success"}
-        else:
-            datos= {'message': "User not found"}
-        return JsonResponse(datos)
 class LuminariaView(View):
 
     @method_decorator(csrf_exempt)
