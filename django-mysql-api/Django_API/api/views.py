@@ -1146,6 +1146,7 @@ class TanqueaguaNivelesView(View):
             events= TanqueAguaNiveles.objects.order_by('id').last()
             if events:
                 data = {
+                    'id': events.id,
                     'nivel_maximo': events.nivel_maximo,
                     'nivel_minimo': events.nivel_minimo,
                     'altura': events.altura,

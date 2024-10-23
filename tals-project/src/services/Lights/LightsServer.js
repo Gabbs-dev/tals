@@ -22,17 +22,5 @@ export const createLightState = async (data) => {
             "luz5":Number(data.luz5),
             "luz6":Number(data.luz6),
         })
-    }); console.log(data);
-};
-
-export const autoLightState = async (data) => {
-    return await fetch(API_URL,{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            data
-        })
-    }); console.log(data);
+    });
 };

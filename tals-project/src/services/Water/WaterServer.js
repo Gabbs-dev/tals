@@ -28,7 +28,6 @@ export const deleteWatertank = async (WTID) => {
     });
 };
 
-
 // Water Tank Levels //
 
 export const getWatertankLevels = async () => {

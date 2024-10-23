@@ -1,5 +1,4 @@
 import * as LightsServer from '../services/Lights/LightsServer';
-import { NotificationProvider } from '../Header/Notifications/NotificationServer';
 
 export const addEventListener = async (message,event) => {
   if (message === 'lights'){
@@ -7,27 +6,31 @@ export const addEventListener = async (message,event) => {
       if (event === 'ON') {
         // Enviar comando a Django para encender luces
         const order = {
-          'luz1' : 1,
-          'luz2' : 1,
-          'luz3' : 1,
-          'luz4' : 1,
-          'luz5' : 1,
-          'luz6' : 1,
+          'luz1' : '1',
+          'luz2' : '1',
+          'luz3' : '1',
+          'luz4' : '1',
+          'luz5' : '1',
+          'luz6' : '1',
         };
-        LightsServer.autoLightState(order);
-        console.log({'message':'Success'}); 
+        const turn_on = LightsServer.createLightState(order);
+        if (turn_on){
+          console.log({'message':'Success'}); 
+        }
       } else if (event === 'OFF') {
         // Enviar comando a Django para apagar luces
         const order = {
-          'luz1' : 0,
-          'luz2' : 0,
-          'luz3' : 0,
-          'luz4' : 0,
-          'luz5' : 0,
-          'luz6' : 0,
+          'luz1' : '0',
+          'luz2' : '0',
+          'luz3' : '0',
+          'luz4' : '0',
+          'luz5' : '0',
+          'luz6' : '0',
         };
-        LightsServer.autoLightState(order);
-        console.log({'message':'Success'}); 
+        const turn_off = LightsServer.createLightState(order);
+        if (turn_off){
+          console.log({'message':'Success'}); 
+        } 
       }
     } catch(error){
       console.log('Ha ocurrido un error: ',error);
