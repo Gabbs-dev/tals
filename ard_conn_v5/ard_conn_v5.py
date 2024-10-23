@@ -47,6 +47,17 @@ async def insertar_tmph(temperatura,humedad):
   except mysql.connector.Error as err:
     print(f"Error al insertar datos en la base de datos: {err}")
 
+async def insertar_cameras(posicion_x,posicion_y):
+  try:
+    mycursor = mydb.cursor()
+    sql = "INSERT INTO camaras (posicion_x,posicion_y) VALUES (%s,%s)"
+    val = (posicion_x,posicion_y)
+    mycursor.execute(sql, val)
+    mydb.commit()
+    print("Data succesfully inserted [camaras]")
+  except mysql.connector.Error as err:
+    print(f"Error al insertar datos en la base de datos: {err}")
+
 async def insertar_luz(luz1,luz2,luz3,luz4,luz5,luz6):
   try:
     mycursor = mydb.cursor()
@@ -77,11 +88,14 @@ async def recibir_y_guardar_datos():
         luz4 = data_json["estado_rele4"]
         luz5 = data_json["estado_rele5"]
         luz6 = data_json["estado_rele6"]
+        servo_x = data_json["estado_motx"]
+        servo_y = data_json["estado_moty"]
         # Insertar los datos en la base de datos
         await insertar_na(nivel_agua)
         await insertar_mv(movimiento)
         await insertar_tmph(temperatura,humedad)
         await insertar_luz(luz1,luz2,luz3,luz4,luz5,luz6)
+        await insertar_cameras(servo_x,servo_y)
       except (serial.SerialException, json.JSONDecodeError, mysql.connector.Error) as e:
         print(f"Error: {e}")
       await asyncio.sleep(2)

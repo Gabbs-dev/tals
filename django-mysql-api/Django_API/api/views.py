@@ -149,7 +149,7 @@ class CamarasView(View):
             data = ser.readline().decode('utf-8').strip()
             if data:
                 jd = json.loads(data)
-                rele1 = jd['estado_rele1']
+                rele1 = jd['estado_rele']
                 rele2 = jd['estado_rele2']
                 rele3 = jd['estado_rele3']
                 rele4 = jd['estado_rele4']
@@ -158,6 +158,7 @@ class CamarasView(View):
                 command = f"{rele1},{rele2},{rele3},{rele4},{rele5},{rele6},"
                 if command:
                     command += ser_command
+                    print(command)
                     ser.write(command.encode('utf-8'))
                     return JsonResponse({'message': "Success"})
             return JsonResponse({'message': "Error"})
