@@ -34,7 +34,7 @@ int pirSensor = digitalRead(PIR_PIN);
 DHT dht(DHTPIN, DHTTYPE);
 
 //Parametros para recibir ordenes de python
-int vrele = 0, vrele2 = 0, vrele3 = 0, vrele4 = 0, vrele5 = 0, vrele6 = 0, vmotx = 0, vmoty = 40, pos, pos1, pos2, pos3, pos4, pos5, pos6;
+int vrele = 0, vrele2 = 0, vrele3 = 0, vrele4 = 0, vrele5 = 0, vrele6 = 0, vmotx = 20, vmoty = 45, pos, pos1, pos2, pos3, pos4, pos5, pos6;
 String cad, cad1, cad2, cad3, cad4, cad5, cad6, cad7, cad8;
 
 // Tamaño del buffer JSON (ajuste según la cantidad de datos)
@@ -44,8 +44,8 @@ DynamicJsonDocument doc(capacity);
 // Movimiento automático
 bool modo_automatico = false;
 const int velocidad = 50; // Ajusta la velocidad del movimiento (ms)
-const int angulo_min = 10;
-const int angulo_max = 170;
+const int angulo_min = 20;
+const int angulo_max = 160;
 
 // Switch de tareas
 enum Modo {
@@ -57,9 +57,9 @@ Modo modo_actual = ENVIAR;
 void setup() {
   Serial.begin(9600);
   motx.attach(PIN_MOTX);
-  motx.write(0);
+  motx.write(20);
   moty.attach(PIN_MOTY);
-  moty.write(40);
+  moty.write(45);
   pinMode(PIR_PIN, INPUT);
   // Configura los pines de los relés como salidas
   pinMode(RELE_PIN, OUTPUT);

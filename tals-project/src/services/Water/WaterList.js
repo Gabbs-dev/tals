@@ -1,4 +1,4 @@
-﻿import React, { useState,useEffect} from 'react';
+﻿import React, { useState,useEffect,useCallback} from 'react';
 import WTItem from './WaterItem';
 import { WaterTank } from '../../Charts/watertank';
 //import WaterChart from '../../Charts/WaterChart';
@@ -6,28 +6,65 @@ import SprayList from './SprayList';
 import * as WTServer from './WaterServer';
 
 const WTList = () => {
-    const [porcentaje, setPorcentaje] = useState(0);
-    const [TALevels, setTanqueAguaLevels] = useState([]);
-    const [showConfigButton, setShowConfigButton] = useState(false);
-    const [showEditButtons, setShowEditButtons] = useState(false);
+  const [TanqueAgua, setTanqueAgua] = useState([]);
+  const [TALevels, setTanqueAguaLevels] = useState([]);
+  const [porcentaje, setPorcentaje] = useState(0);
+  const [litros, setLitros] = useState(0);
+  const [showConfigButton, setShowConfigButton] = useState(false);
+  const [showEditButtons, setShowEditButtons] = useState(false);
 
-  const handlePorcentajeChange = (nuevoPorcentaje) => {
-    setPorcentaje(nuevoPorcentaje);
+  const actualState = async () => {
+    try {
+      const res = await WTServer.getLastWatertank();
+      const data = await res.json();
+      setTanqueAgua(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const Levels = async () => {
-    try{
-        const res = await WTServer.getWatertankLevels();
-        const data = await res.json();
-        setTanqueAguaLevels(data);
-    }catch(error){
-        console.log(error);
-        return null;
-    };
+    try {
+      const res = await WTServer.getWatertankLevels();
+      const data = await res.json();
+      setTanqueAguaLevels(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const calcularLitros = useCallback(() => {
+    const alturaTanque = (TALevels?.tanklevel?.altura || 0) * 100;
+    const radioTanque = (TALevels?.tanklevel?.diametro || 0) * 100;
+    const divRadioTanque = radioTanque / 2;
+    const distancia = TanqueAgua?.Watertank?.nivel_agua || 0;
+    const alturaLiquido = alturaTanque - distancia;
+    const volumen = Math.PI * Math.pow(divRadioTanque, 2) * alturaLiquido;
+    const lts = volumen / 1000;
+    setLitros(lts.toFixed(2));
+  }, [TanqueAgua, TALevels]);
+
+  const calcularPorcentaje = useCallback(() => {
+    const alturaTanque = (TALevels?.tanklevel?.altura || 0) * 100;
+    const radioTanque = (TALevels?.tanklevel?.diametro || 0) * 100;
+    const divRadioTanque = radioTanque / 2;
+    const volumenTotal = Math.PI * Math.pow(divRadioTanque, 2) * alturaTanque;
+    const porcentajeCalculado = (litros * 100) / (volumenTotal / 1000);
+    setPorcentaje(porcentajeCalculado.toFixed(2));
+  }, [litros, TALevels]);
+
   useEffect(() => {
-    Levels();
-  }, [] );
+    const fetchData = async () => {
+      await actualState();
+      await Levels();
+    };
+    fetchData();
+    const interval = setInterval(fetchData, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => calcularLitros(), [TanqueAgua, TALevels, calcularLitros]);
+  useEffect(() => calcularPorcentaje(), [litros, calcularPorcentaje]);
 
   useEffect(() => {
     if (TALevels && TALevels.tanklevel) {
@@ -46,7 +83,10 @@ const WTList = () => {
       <h2 className="display-6 mt-5">Nivel de Agua / Actividad</h2>
       <hr className="divider" />
       <div className="col-md-6">
-        <WTItem onPorcentajeChange={handlePorcentajeChange} />
+        <WTItem 
+          porcentaje={porcentaje}
+          litros={litros}
+        />
         <h2 className='display-6 mt-5'>Configuración</h2>
         <hr className='divider'/>
         <div className="card text-bg-light mt-3">
@@ -94,12 +134,6 @@ const WTList = () => {
           </div>
         </div>
       </div>
-      {/*}<div className="card text-bg-light mt-3">
-        <div className="card-header">Resumen Global / Uso de Agua</div>
-        <div className="card-body">
-          <WaterChart />
-        </div>
-      </div>{*/}
       <SprayList />
     </div>
   );

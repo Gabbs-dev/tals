@@ -43,10 +43,10 @@ const SecurityList = () =>{
                 <div className="card text-bg-light">
                     <div className="card-header">Camaras</div>
                     <div className="card-body text-center">
-                       <div class="d-flex flex-row justify-content-evenly">
-                            <button class="btn btn-primary" type="button" name="posicionI" onClick={() => handleClick('20','45')}>Mover Izquierda</button>
-                            <button class="btn btn-primary" type="button" name="posicionC" onClick={() => handleClick('90','45')}>Mover Centro</button>
-                            <button class="btn btn-primary" type="button" name="posicionD" onClick={() => handleClick('160','45')}>Mover Derecha</button>
+                       <div className="d-flex flex-row justify-content-evenly">
+                            <button className="btn btn-primary" type="button" name="posicionI" onClick={() => handleClick('20','45')}>Mover Izquierda</button>
+                            <button className="btn btn-primary" type="button" name="posicionC" onClick={() => handleClick('90','45')}>Mover Centro</button>
+                            <button className="btn btn-primary" type="button" name="posicionD" onClick={() => handleClick('160','45')}>Mover Derecha</button>
                         </div>
                     </div>
                 </div>

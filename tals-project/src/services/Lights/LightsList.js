@@ -8,7 +8,6 @@ const LightsList = () => {
     const [showConfigButton, setShowConfigButton] = useState(false);
     const [showEditButtons, setShowEditButtons] = useState(false);
 
-
     const fetchData = async () => {
         try {
             const response = await LightTimer.getTimersList();
@@ -39,19 +38,13 @@ const LightsList = () => {
         <div className='row'>
             <h1 className='display-4'>Panel de Control / Luminarias</h1>
             <hr className='divider'/>
-            <h3 className='display-6 mt-5'>Dispositivos Disponibles</h3>
+            <h3 className='display-6 mt-4'>Dispositivos Disponibles</h3>
             <hr className='divider'/>
             <div className="col-md-6">
                 <LightItem />
             </div>
             <div className="col-md-6">
-                <div className="card text-bg-light">
-                    <div className="card-header">Resumen Global</div>
-                    <div className="card-body">
-                        <LightsChart/>
-                    </div>
-                </div>
-                <h2 className='display-6 mt-5'>Configuracion</h2>
+                <h2 className='display-6'>Configuracion</h2>
                 <hr className='divider'/>
                 <div className="card text-bg-light">
                     <div className="d-flex justify-content-between card-header">
@@ -87,6 +80,12 @@ const LightsList = () => {
                                 )}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                <div className="card text-bg-light mt-3">
+                    <div className="card-header">Resumen Global</div>
+                    <div className="card-body">
+                        <LightsChart/>
                     </div>
                 </div>
             </div>

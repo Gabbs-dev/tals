@@ -1,13 +1,27 @@
-﻿import ThermostatItem from './ThermostatItem';
-import TempCharts from '../../Charts/TempChart';
+﻿import TempCharts from '../../Charts/TempChart';
 import { useEffect, useState } from "react";
 import * as ThermLevels from './Levels/ThermLevels';
-
+import { Thermometer } from '../../Charts/thermometer';
+import * as ThermServer from './ThermServer';
+import ThermostatItem from './ThermostatItem';
 
 const ThermList = () => {
     const [levelsData, setLevelsData] = useState([]);
     const [showConfigButton, setShowConfigButton] = useState(false);
     const [showEditButtons, setShowEditButtons] = useState(false);
+    const [Termostato, setTermostato] = useState([]);
+
+    const actualState = async () => {
+        try{
+            const res = await ThermServer.getLastThermostat();
+            const data = await res.json();
+            console.log(data);
+            setTermostato(data);
+        }catch(error){
+            console.log(error);
+            return null;
+        };
+    };
 
     const fetchData = async () => {
         try {
@@ -20,9 +34,13 @@ const ThermList = () => {
     };
 
     useEffect(() => {
+        actualState();
         fetchData();
-        // eslint-disable-next-line
-    }, []);
+        // Actualizar cada 5 segundos (ajusta el intervalo según tus necesidades)
+        const interval = setInterval(actualState, 5000);
+        // Limpiar el intervalo cuando el componente se desmonte
+        return () => clearInterval(interval);
+    }, [] );
 
     useEffect(() => {
         if (levelsData && levelsData.thermLevel) {
@@ -41,7 +59,19 @@ const ThermList = () => {
             <h2 className='display-6 mt-5'>Dispositivos Activos</h2>
             <hr className='divider'/>
             <div className="col-md-4">
-                <ThermostatItem />
+                <ThermostatItem 
+                    temperatura={Termostato?.Thermostat?.temperatura}
+                    humedad={Termostato?.Thermostat?.humedad}
+                    niveles={levelsData?.thermLevel?.temperatura_deseada}
+                />
+            </div>
+            <div className="col-md-8">
+                <div className="card text-bg-light">
+                    <div className="card-header">Temperatura Actual</div>
+                    <div className="card-body">
+                        <Thermometer temperature={Termostato?.Thermostat?.temperatura}/>
+                    </div>
+                </div>
             </div>
             <div className="col-md-8">
                 <div className="card text-bg-light">

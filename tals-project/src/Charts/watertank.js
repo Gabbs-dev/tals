@@ -20,7 +20,7 @@ export const WaterTank = ({ porcentaje }) => {
       <div className="tank">
         <div className="water" style={{ height: `${porcentaje}%` }} />
       </div>
-      <p>Nivel de agua: {porcentaje.toFixed(2)}%</p>
+      <p>Nivel de agua: {porcentaje}%</p>
     </div>
   );
 };
