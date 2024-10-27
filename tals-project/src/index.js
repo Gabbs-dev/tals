@@ -14,9 +14,9 @@ import WTList from './services/Water/WaterList';
 import WTForm from './services/Water/WaterForm';
 import ThermList from './services/Therm/ThermList';
 import ThermForm from './services/Therm/ThermForm';
-import DevicesList from './services/Devices';
 import SprayForm from './services/Water/SprayForm';
 import SecurityList from './services/Security/SecurityList'
+import Reports from './Reports/Reports';
 
 //externals
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -33,10 +33,10 @@ root.render(
             <div className="container my-4">
                 <Routes>       
                     <Route exact path='/' Component={Dashboard} />
-                    <Route path='/devices/' Component={DevicesList} />
                     <Route path='/users/' Component={UsersList} />
                     <Route path='/users/register/' Component={UsersForm} />
                     <Route path='/users/update/:id' Component={UsersForm} />
+                    <Route path='/reports' Component={Reports} />
                     <Route path='/lights/' Component={LightsList} />
                     <Route path='/lights/config/' Component={LightsForm} />
                     <Route path='/lights/config/:id' Component={LightsForm} />

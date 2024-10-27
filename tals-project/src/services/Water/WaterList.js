@@ -80,6 +80,9 @@ const WTList = () => {
     <div className="row">
       <h1 className="display-4 text-center">Panel de Control / Tanque de Agua</h1>
       <hr className="divider" />
+      <div className="col">
+        <a className='btn btn-secondary' href='/'>Regresar</a>
+      </div>
       <h2 className="display-6 mt-5">Nivel de Agua / Actividad</h2>
       <hr className="divider" />
       <div className="col-md-6">

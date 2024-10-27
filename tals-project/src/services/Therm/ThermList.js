@@ -56,6 +56,9 @@ const ThermList = () => {
         <div className='row'>
             <h1 className='display-4 text-center'>Panel de Control / Temperatura</h1>
             <hr className='divider'/>
+            <div className="col">
+                <a className='btn btn-secondary' href='/'>Regresar</a>
+            </div>
             <h2 className='display-6 mt-5'>Dispositivos Activos</h2>
             <hr className='divider'/>
             <div className="col-md-4">

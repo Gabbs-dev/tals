@@ -38,6 +38,9 @@ const LightsList = () => {
         <div className='row'>
             <h1 className='display-4'>Panel de Control / Luminarias</h1>
             <hr className='divider'/>
+            <div className="col">
+                <a className='btn btn-secondary' href='/'>Regresar</a>
+            </div>
             <h3 className='display-6 mt-4'>Dispositivos Disponibles</h3>
             <hr className='divider'/>
             <div className="col-md-6">

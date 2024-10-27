@@ -33,34 +33,7 @@ const Header = () => {
                                     <a className="nav-link active" href="/users"><i class="bi bi-people"/> Usuarios</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link active" href="/devices"><i class="bi bi-plus-circle"/> Agregar Dispositivo</a>
-                                </li>
-                                <li className="nav-item">
-                                    <div className="accordion mt-3" id="accordionExample">
-                                        <div className="accordion-item">
-                                            <h2 className="accordion-header">
-                                                <button className="accordion-button bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                                                    Servicios
-                                                </button>
-                                            </h2>
-                                            <div id="collapseOne" className="accordion-collapse collapse show">
-                                                <div className="accordion-body bg-dark">
-                                                    <ul className="navbar-nav">
-                                                        <li className="nav-item"><a className="nav-link active" href="/lights"><i class="bi bi-lightbulb"/> Luminarias</a></li> 
-                                                    </ul>
-                                                    <ul className="navbar-nav">
-                                                        <li className="nav-item"><a className="nav-link active" href="/water"><i class="bi bi-droplet"/> Agua</a></li> 
-                                                    </ul>
-                                                    <ul className="navbar-nav">
-                                                        <li className="nav-item"><a className="nav-link active" href="/thermostat"><i class="bi bi-thermometer"/> Temperatura</a></li> 
-                                                    </ul>
-                                                    <ul className="navbar-nav">
-                                                        <li className="nav-item"><a className="nav-link active" href="/security"><i class="bi bi-shield-shaded"/> Seguridad</a></li> 
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <a className="nav-link active" href="/reports"><i class="bi bi-clipboard-data"/> Reportes</a>
                                 </li>
                             </ul>
                         </div>
