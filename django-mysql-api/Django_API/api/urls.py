@@ -2,6 +2,7 @@
 from .views import *
 
 urlpatterns = [
+    path('login/',LoginUserView.as_view(), name='login_user'),
     path('users/',UsuarioView.as_view(), name='users_list'),
     path('users/<int:id>',UsuarioView.as_view(), name='users_process'),
     path('serviceM/',MonitoreroServicioView.as_view(), name='services_list'),

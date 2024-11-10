@@ -19,7 +19,7 @@ import SecurityList from './services/Security/SecurityList';
 import Reports from './Reports/Reports';
 import Login from './Login/Login';
 import ProtectedRoute from './Login/ProtectedRoute';
-import { AuthProvider } from './Login/AuthContex';
+import { AuthProvider } from './Login/AuthContext';
 
 // CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -32,12 +32,12 @@ console.log()
 root.render(
     <BrowserRouter>
         <AuthProvider>
-            <ProtectedRoute Header />
-            < NotificationProvider>
+            <NotificationProvider>
+                <ProtectedRoute Header />
                 <div className="container my-4">
                     <Routes>
                         <Route path="/login" Component={Login} />
-                        <Route path="/" element={<ProtectedRoute component={Dashboard} />} />
+                        <Route exact path="/" element={<ProtectedRoute component={Dashboard} />} />
                         <Route path="/users" element={<ProtectedRoute component={UsersList} />} />
                         <Route path="/users/register" element={<ProtectedRoute component={UsersForm} />} />
                         <Route path="/users/update/:id" element={<ProtectedRoute component={UsersForm} />} />

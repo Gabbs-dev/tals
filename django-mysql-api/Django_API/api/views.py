@@ -2,6 +2,8 @@ from django.http.response import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
+from django.shortcuts import get_object_or_404
+from rest_framework.authtoken.models import Token
 import serial 
 from .models import *
 import json
@@ -59,6 +61,21 @@ class UsuarioView(View):
         else:
             datos= {'message': "User not found"}
         return JsonResponse(datos)
+
+class LoginUserView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs) :
+        return super().dispatch(request, *args, **kwargs)
+    def post(self, request):
+        jd = json.loads(request.body)
+        user = get_object_or_404(Usuario, nombre=jd['username'], password=jd['password'])
+        if user is not None:
+            token = Token.generate_key()
+            print(token)
+            return JsonResponse({'message': 'Success', 'token': token})
+        else:
+            return JsonResponse({'error': 'Invalid Credentials'})
+
 class MonitoreroServicioView(View):
 
     @method_decorator(csrf_exempt)

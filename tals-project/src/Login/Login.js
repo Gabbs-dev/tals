@@ -1,49 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from './AuthContex';
+import { useAuth } from './AuthContext';
+import { useNavigate } from "react-router";
 import * as LoginServer from './LoginServer';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
     const { login } = useAuth();
-    const [user, setUser] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
-    const getData = async () => {
-        try{
-            const res = await LoginServer.getUsers();
-            const data = await res.json();
-            setUser(data);
-        }catch(error){
-            console.log(error);
-            return null;
-    };}
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // Aquí podrías agregar la lógica de autenticación'
-        try{
-            const nombre_usuario = user.nombre;
-            console.log(nombre_usuario);
-            const contra_usuario = user.password;
-            console.log(contra_usuario);
-        }catch(error){
-            console.error("Ha ocurrido una paraguayada",error);
+        try {
+            const sent = await LoginServer.Login(username,password);
+            const res = await sent.json();
+            console.log(res);
+            if (res.message === "Success") {
+                const token = res.token;
+                localStorage.setItem('authToken', token);
+                login();
+                alert('Inicio de Sesion Exitoso');
+            } else if (res.error) {
+                // Usuario no encontrado o contraseña incorrecta
+                console.error("Credenciales inválidas");
+                alert('Credenciales Inválidas');
+            }
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error);
+            alert('Error al Iniciar Sesión.');
         }
     };
-
-    console.log(user);
-
-    useEffect(() => {
-        getData();
-    }, [] );
     
     return (
         <div >
         <div className="d-flex align-items-center justify-content-center">
-            <div className="card p-4 shadow-lg border-0" style={{ width: '100%', maxWidth: '400px', borderRadius: '15px' }}>
+            <div className="card p-4 shadow-lg border-0" style={{ width: '100%', maxWidth: '500px', borderRadius: '15px', top:'170px' }}>
                 <div className="text-center mb-4">
-                    <img alt='tals_xd' src='../../public/tals.png' width={200} height={200}/>
+                    <div className="login-img"></div>
                     <h2 className="mt-2" style={{ color: '#333' }}>Bienvenido de nuevo</h2>
                     <p className="text-muted">Por favor, inicia sesión en tu cuenta</p>
                 </div>
