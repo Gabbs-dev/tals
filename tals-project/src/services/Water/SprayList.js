@@ -1,5 +1,4 @@
 ﻿import SprayItem from './SprayItem';
-import WaterChart from '../../Charts/WaterChart';
 import { useEffect, useState } from "react";
 import * as SprayTimer from './Timer/SprayTimer';
 
@@ -42,57 +41,49 @@ const SprayList = () => {
                 <SprayItem/>
             </div>
             <div className="col-md-8">
-                <div className="card text-bg-light">
-                    <div className="card-header">Resumen Global</div>
-                    <div className="card-body">
-                        <WaterChart/>
-                    </div>
-                </div>
-            </div>
-            <h2 className='display-6 mt-3'>Control de Regado / Configuración</h2>
-            <hr className='divider'/>
-            <div className="card text-bg-light mt-3">
-                <div className="d-flex aling-items-center justify-content-between card-header">
-                    <h4>Interruptor Automático</h4>
-                    {showConfigButton && (
-                        <a className='btn btn-primary' href="/water/sprayconfig/">Configurar Dispositivo</a>
-                    )}
-                </div>
-                <div className="card-body">
-                    <table class="table table-striped text-center">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Dispositivo</th>
-                                <th scope="col">Auto ON</th>
-                                <th scope="col">Auto OFF</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {timersData?.timerSprays?.length > 0 ? ( 
-                            timersData.timerSprays.map((timer) => {
-                                return(
-                                    <tr key={timer.id}>
-                                        <th scope="row">{timer.id}</th>
-                                        <td>{timer.dispositivo}</td>
-                                        <td>{timer.horario_inicio}</td>
-                                        <td>{timer.horario_cierre}</td>
-                                        <td>
-                                            {showEditButtons && (
-                                                <a className="btn btn-sm btn-warning" href={'/water/sprayconfig/'+(timer.id)}><i className="bi bi-pencil"/></a>
-                                            )}
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        ) : (
-                            <tr>
-                                <td className="text-center" colSpan="5">Data not found</td>    
-                            </tr>
+                <div className="card text-bg-light mt-3">
+                    <div className="d-flex aling-items-center justify-content-between card-header">
+                        <h4>Configuración Automática</h4>
+                        {showConfigButton && (
+                            <a className='btn btn-primary' href="/water/sprayconfig/">Configurar Dispositivo</a>
                         )}
-                        </tbody>
-                    </table>
+                    </div>
+                    <div className="card-body">
+                        <table class="table table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Dispositivo</th>
+                                    <th scope="col">Auto ON</th>
+                                    <th scope="col">Auto OFF</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {timersData?.timerSprays?.length > 0 ? ( 
+                                timersData.timerSprays.map((timer) => {
+                                    return(
+                                        <tr key={timer.id}>
+                                            <th scope="row">{timer.id}</th>
+                                            <td>{timer.dispositivo}</td>
+                                            <td>{timer.horario_inicio}</td>
+                                            <td>{timer.horario_cierre}</td>
+                                            <td>
+                                                {showEditButtons && (
+                                                    <a className="btn btn-sm btn-warning" href={'/water/sprayconfig/'+(timer.id)}><i className="bi bi-pencil"/></a>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            ) : (
+                                <tr>
+                                    <td className="text-center" colSpan="5">Data not found</td>    
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

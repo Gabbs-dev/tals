@@ -1,5 +1,6 @@
 import * as LightsServer from '../services/Lights/LightsServer';
 
+// Interruptores automaticos
 export const addEventListener = async (message,event) => {
   if (message === 'lights'){
     try{

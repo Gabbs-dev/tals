@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 
+// Componente para los temporizadores de las luces
 import * as LightTimer from './Timer/LightTimer';
 
 const LightForm = () => {
@@ -12,10 +13,12 @@ const LightForm = () => {
     const initialState={id:0,dispositivo:"",horario_inicio:"",horario_cierre:""};
     const [Lights, setLights]= useState(initialState);
 
+    // Maneja el estado de los datos en caso de modificacion
     const HandleInputChange = (e) =>{
         setLights({...Lights,[e.target.name]:e.target.value});
     };
 
+    // Envia los datos ingresados a la API
     const HandleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -45,6 +48,7 @@ const LightForm = () => {
         }
     };
 
+    // Obtiene los datos del temporizador existente para luego modificarlos
     const getLight = async (LightID) =>{
         try{
             const res = await LightTimer.getTimer(LightID);
@@ -55,6 +59,8 @@ const LightForm = () => {
             console.log(error);
         }
     };
+
+    // Hook de ejecucion
     useEffect(() => {
         if(params.id){
             getLight(params.id);

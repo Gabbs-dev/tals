@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNotification } from './NotificationServer'; // Ajusta la ruta según tu estructura
+import { useNotification } from './NotificationServer'; // Modulo gestor de las Notificaciones
 
+// Componente principal de la lista
 const NotificationItem = () => {
     const { notifications } = useNotification(); // Obtener las notificaciones desde el contexto
 
@@ -28,4 +29,5 @@ const NotificationItem = () => {
     );
 };
 
+// Exportación del componente para acceder a el globalmente desde el Header
 export default NotificationItem;

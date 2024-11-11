@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from './AuthContext';
 import { useNavigate } from "react-router";
+
+// Componentes de autenticación
+import { useAuth } from './AuthContext';
 import * as LoginServer from './LoginServer';
 
+// Componente principal
 const Login = () => {
-    const { login } = useAuth();
+    const { login } = useAuth(); // Crea el contexto de inicio de sesión
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    // Envio de las credenciales a la API
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             const sent = await LoginServer.Login(username,password);
             const res = await sent.json();
-            console.log(res);
             if (res.message === "Success") {
+                // Usuario encontrado, extrae el token y lo almacena localmente e inicia sesión
                 const token = res.token;
                 localStorage.setItem('authToken', token);
                 login();
@@ -26,7 +30,7 @@ const Login = () => {
             }
         } catch (error) {
             console.error("Error al iniciar sesión:", error);
-            alert('Error al Iniciar Sesión.');
+            alert('No se pudo Iniciar Sesión.');
         }
     };
     
@@ -37,8 +41,7 @@ const Login = () => {
                 <div className="text-center mb-4">
                     <div className="login-img"></div>
                     <img src={`${process.env.PUBLIC_URL}/tals.png`} alt="Descripción de la imagen" width="100%"/>
-                    <h2 className="mt-2" style={{ color: '#333' }}>Bienvenido de nuevo</h2>
-                    <p className="text-muted">Por favor, inicia sesión en tu cuenta</p>
+                    <p className="text-muted mt-5">Por favor, inicia sesión en tu cuenta</p>
                 </div>
                 <form onSubmit={handleLogin}>
                     <div className="mb-3">

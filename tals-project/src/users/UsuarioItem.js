@@ -20,11 +20,11 @@ const UsuarioItem = ({usuario, listUsers}) => {
             <div className="card card-body">
                 <h3 className="card-tittle"> {usuario.nombre} </h3>
                 <p className="card-text">Email: <strong> {usuario.email} </strong></p>
-                {usuario.nombre !== 'superAdmin' && (
-                    <>
+                {usuario.nombre !== 'talsAdmin' && (
+                    <div>
                     <button onClick={()=>navigate(`/users/update/${usuario.id}`)} className="btn btn-warning my-2">Editar</button>
                     <button onClick={()=>usuario.id && handleDelete(usuario.id)} className="btn btn-danger my-2">Eliminar</button>
-                    </>
+                    </div>
                 )}
             </div>
         </div>

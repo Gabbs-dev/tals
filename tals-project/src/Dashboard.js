@@ -1,7 +1,7 @@
 ﻿import React from "react";
 
+// Componente principal de la aplicación
 const Dashboard = () => {
-
     return (
         <div className='row'>
             <div className="col">
@@ -29,8 +29,8 @@ const Dashboard = () => {
                 </a>
             </div>
         </div>
-    )
+    );
+};
 
-}
-
+// Exportación del componente para acceder a el globalmente desde el index
 export default Dashboard;

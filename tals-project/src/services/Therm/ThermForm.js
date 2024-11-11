@@ -12,10 +12,12 @@ const ThermForm = () => {
     const initialState={id:0,dispositivo:"",temperatura_deseada:"0.0"};
     const [Level, setLevel]= useState(initialState);
 
+
     const HandleInputChange = (e) =>{
         setLevel({...Level,[e.target.name]:e.target.value});
     };
 
+    // Envio de datos a la API
     const HandleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -45,6 +47,7 @@ const ThermForm = () => {
         }
     };
 
+    // Extrae los datos de los niveles de temperatura deseados de la API
     const getThermostat = async (ThermID) =>{
         try{
             const res = await ThermLevels.getLevel(ThermID);
@@ -56,6 +59,7 @@ const ThermForm = () => {
         }
     };
 
+    // Hook de ejecución
     useEffect(() => {
         if(params.id){
             getThermostat(params.id);

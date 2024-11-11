@@ -1,5 +1,4 @@
-﻿import TempCharts from '../../Charts/TempChart';
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import * as ThermLevels from './Levels/ThermLevels';
 import { Thermometer } from '../../Charts/thermometer';
 import * as ThermServer from './ThermServer';
@@ -11,6 +10,7 @@ const ThermList = () => {
     const [showEditButtons, setShowEditButtons] = useState(false);
     const [Termostato, setTermostato] = useState([]);
 
+    // Extrae el estado actual del termometro de la API 
     const actualState = async () => {
         try{
             const res = await ThermServer.getLastThermostat();
@@ -23,6 +23,7 @@ const ThermList = () => {
         };
     };
 
+    // Extrae los niveles de temperatura ingresados por el usuario
     const fetchData = async () => {
         try {
             const response = await ThermLevels.getLevelsList();
@@ -33,15 +34,17 @@ const ThermList = () => {
         }
     };
 
+    // Hook de ejecucion con intervalos definidos
     useEffect(() => {
         actualState();
         fetchData();
-        // Actualizar cada 5 segundos (ajusta el intervalo según tus necesidades)
+        // Actualizar cada 5 segundos (ajusta según las necesidades)
         const interval = setInterval(actualState, 5000);
         // Limpiar el intervalo cuando el componente se desmonte
         return () => clearInterval(interval);
     }, [] );
 
+    // Configuracion de renderizado de botones
     useEffect(() => {
         if (levelsData && levelsData.thermLevel) {
             setShowConfigButton(false); // Ocultar botón de configurar si hay registros
@@ -73,14 +76,6 @@ const ThermList = () => {
                     <div className="card-header">Temperatura Actual</div>
                     <div className="card-body">
                         <Thermometer temperature={Termostato?.Thermostat?.temperatura}/>
-                    </div>
-                </div>
-            </div>
-            <div className="col-md-8">
-                <div className="card text-bg-light">
-                    <div className="card-header">Resumen Global</div>
-                    <div className="card-body">
-                        <TempCharts/>
                     </div>
                 </div>
             </div>

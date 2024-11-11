@@ -4,6 +4,7 @@ import * as LightsServer from './LightsServer';
 const LightItem = () => {
     const [Luminaria, setLuminaria] = useState([]);
 
+    // Obtiene el estado de las luces
     const actualState = async () => {
         try{
             const res = await LightsServer.getLastLight();
@@ -14,23 +15,28 @@ const LightItem = () => {
             return null;
         };
     };
+
+    // Hook de ejecucion
     useEffect(() => {
         actualState();
-        // Actualizar cada 1 segundos (ajusta el intervalo según tus necesidades)
+        // Actualizar cada 1 segundos (ajustar según las necesidades)
         const interval = setInterval(actualState, 1000);
         // Limpiar el intervalo cuando el componente se desmonte
         return () => clearInterval(interval);
     }, [] );
 
-
+    // Funcion para encendido de luces individualmente
     const handleClick = async (buttonName) => {
         try {
-            const lightNumber = buttonName.slice(3);
-            const newLuminariaState = { ...Luminaria.lastLight };
+            const lightNumber = buttonName.slice(3); // Recibe el nombre y el numero de la luz
+            const newLuminariaState = { ...Luminaria.lastLight }; // Revisa el estado actual
+
+            // Compara el estado logico actual para ejecutar el cambio
             newLuminariaState[`luz${lightNumber}`] = newLuminariaState[`luz${lightNumber}`] === 0 ? 1 : 0;
-            const response = await LightsServer.createLightState(newLuminariaState);
+            const response = await LightsServer.createLightState(newLuminariaState); // Envia el nuevo estado a la API
             if (response.ok) {
-            setLuminaria({ ...Luminaria, lastLight: newLuminariaState });
+                // Si todo se ejecuta correctamente, actualiza el estado
+                setLuminaria({ ...Luminaria, lastLight: newLuminariaState });
             } else {
             console.error('Error al actualizar el estado de la luz:', response.statusText);
             }
@@ -39,6 +45,7 @@ const LightItem = () => {
         }
     };
 
+    // Funcion para cambiar renderizado de logico a digital
     function getEstadoLuz(luz) {
         switch (luz) {
             case 0:
@@ -57,6 +64,12 @@ const LightItem = () => {
                     <div className="card card-body">
                         <div className="d-inline-flex justify-content-between">    
                             <h3 className="card-tittle">Luz 1</h3>
+                            {/* 
+                                El boton contiene el estado logico actual de la luz recibido desde la API 
+                                al hacer click envia el nombre de la luz y el estado,
+                                la funcion se encarga de identificar el numero de la luz y evaluar su estado actual
+                                y envia el estado nuevo a la API para encender o apagar la luz
+                            */}
                             {Luminaria?.lastLight?.luz1 !== undefined && (
                                 <button type='submit' className="btn btn-outline-warning" name="luz1" onClick={() => handleClick('luz1')}>
                                     <i className="bi bi-lightbulb" />

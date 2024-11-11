@@ -20,24 +20,24 @@ import Reports from './Reports/Reports';
 import Login from './Login/Login';
 import ProtectedRoute from './Login/ProtectedRoute';
 import { AuthProvider } from './Login/AuthContext';
+import { NotificationProvider } from './Header/Notifications/NotificationServer';
 
 // CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { NotificationProvider } from './Header/Notifications/NotificationServer';
 import './index.css';
 
 // Componente principal de la aplicación
 const App = () => {
     const location = useLocation(); // useLocation llamado dentro de un componente
-
     return (
         <AuthProvider>
             <NotificationProvider>
-                {/* Renderiza el Header solo si no estás en la página de login */}
+                {/* Renderiza el Header solo si no está en la página de login */}
                 {location.pathname !== '/login' && <Header />}
                 <div className="container my-4">
                     <Routes>
+                        {/* Rutas protegidas por el modulo AuthProvider y ProtectedRoutes */}
                         <Route path="/login" element={<Login />} />
                         <Route exact path="/" element={<ProtectedRoute component={Dashboard} />} />
                         <Route path="/users" element={<ProtectedRoute component={UsersList} />} />

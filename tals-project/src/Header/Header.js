@@ -1,12 +1,20 @@
 ﻿import React from 'react';
+
+// Modulos de notificaciones
 import NotificationItem from './Notifications/NotificationItem';
 import { useNotification } from './Notifications/NotificationServer';
-import { Offcanvas, Collapse, Dropdown } from 'bootstrap';
 import AlertsItem from './Notifications/Alerts/AlertsItem';
+
+// Contexto de autenticación, usado para cerrar sesión
 import { useAuth } from '../Login/AuthContext';
+
+// Extras
+import { Offcanvas, Collapse, Dropdown } from 'bootstrap';
+
+// Componente Principal
 const Header = () => {
-    const { notifications } = useNotification();
-    const { logout } = useAuth();
+    const { notifications } = useNotification(); // Contexto de Notificaciones
+    const { logout } = useAuth(); // Cierre de sesión
     return(
         <header>
             <nav className="navbar navbar-dark bg-black md-4">
@@ -34,17 +42,19 @@ const Header = () => {
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link active" href="/reports"><i class="bi bi-clipboard-data"/> Reportes</a>
-                                    <button onClick={logout} className='nav-link active'><i class="bi bi-door-closed"></i>Cerrar sesión</button>
+                                </li>
+                                <li className="nav-item">
+                                    <button onClick={logout} className='nav-link active'><i class="bi bi-door-closed"></i> Cerrar sesión</button>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </nav>
-        </header>
-        
+        </header>   
     );
     // eslint-disable-next-line
 };
 
+// Exportación del componente para acceder a el globalmente desde el index
 export default Header;

@@ -1,5 +1,4 @@
 ﻿import LightItem from './LightsItem';
-import LightsChart from '../../Charts/LightsChart';
 import { useEffect, useState } from "react";
 import * as LightTimer from './Timer/LightTimer'
 
@@ -8,6 +7,7 @@ const LightsList = () => {
     const [showConfigButton, setShowConfigButton] = useState(false);
     const [showEditButtons, setShowEditButtons] = useState(false);
 
+    // Obtener los datos de los temporizadores para los interruptores automaticos
     const fetchData = async () => {
         try {
             const response = await LightTimer.getTimersList();
@@ -18,11 +18,13 @@ const LightsList = () => {
         }
     };
 
+    // Hook de ejecución para los temporizadores
     useEffect(() => {
         fetchData();
         // eslint-disable-next-line
     }, []);
 
+    // Hook para condiciones de renderizado de los botones
     useEffect(() => {
         if (timersData && timersData.timerLight) {
             setShowConfigButton(false); // Ocultar botón de configurar si hay registros
@@ -83,12 +85,6 @@ const LightsList = () => {
                                 )}
                             </tbody>
                         </table>
-                    </div>
-                </div>
-                <div className="card text-bg-light mt-3">
-                    <div className="card-header">Resumen Global</div>
-                    <div className="card-body">
-                        <LightsChart/>
                     </div>
                 </div>
             </div>
