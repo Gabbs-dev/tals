@@ -1,11 +1,19 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    // Inicializar el estado desde `localStorage`, con un valor por defecto de `false`
+    const [isAuthenticated, setIsAuthenticated] = useState(
+        () => localStorage.getItem('isAuthenticated') === 'true'
+    );
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Almacena el valor de `isAuthenticated` en `localStorage` cada vez que cambia
+        localStorage.setItem('isAuthenticated', isAuthenticated);
+    }, [isAuthenticated]);
 
     const login = () => {
         setIsAuthenticated(true);
@@ -24,4 +32,6 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
+// Hook personalizado para acceder al contexto de autenticación
 export const useAuth = () => useContext(AuthContext);
+

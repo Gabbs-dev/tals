@@ -3,10 +3,10 @@ import NotificationItem from './Notifications/NotificationItem';
 import { useNotification } from './Notifications/NotificationServer';
 import { Offcanvas, Collapse, Dropdown } from 'bootstrap';
 import AlertsItem from './Notifications/Alerts/AlertsItem';
-
+import { useAuth } from '../Login/AuthContext';
 const Header = () => {
     const { notifications } = useNotification();
-
+    const { logout } = useAuth();
     return(
         <header>
             <nav className="navbar navbar-dark bg-black md-4">
@@ -34,6 +34,7 @@ const Header = () => {
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link active" href="/reports"><i class="bi bi-clipboard-data"/> Reportes</a>
+                                    <button onClick={logout} className='nav-link active'><i class="bi bi-door-closed"></i>Cerrar sesión</button>
                                 </li>
                             </ul>
                         </div>

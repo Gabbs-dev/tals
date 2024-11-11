@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
 // Servicios y componentes
@@ -27,16 +27,18 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { NotificationProvider } from './Header/Notifications/NotificationServer';
 import './index.css';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-console.log()
-root.render(
-    <BrowserRouter>
+// Componente principal de la aplicación
+const App = () => {
+    const location = useLocation(); // useLocation llamado dentro de un componente
+
+    return (
         <AuthProvider>
             <NotificationProvider>
-                <ProtectedRoute Header />
+                {/* Renderiza el Header solo si no estás en la página de login */}
+                {location.pathname !== '/login' && <Header />}
                 <div className="container my-4">
                     <Routes>
-                        <Route path="/login" Component={Login} />
+                        <Route path="/login" element={<Login />} />
                         <Route exact path="/" element={<ProtectedRoute component={Dashboard} />} />
                         <Route path="/users" element={<ProtectedRoute component={UsersList} />} />
                         <Route path="/users/register" element={<ProtectedRoute component={UsersForm} />} />
@@ -58,6 +60,14 @@ root.render(
                 </div>
             </NotificationProvider>
         </AuthProvider>
+    );
+};
+
+// Renderización de la aplicación en el DOM
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+    <BrowserRouter>
+        <App />
     </BrowserRouter>
 );
 

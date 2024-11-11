@@ -33,9 +33,10 @@ const Login = () => {
     return (
         <div >
         <div className="d-flex align-items-center justify-content-center">
-            <div className="card p-4 shadow-lg border-0" style={{ width: '100%', maxWidth: '500px', borderRadius: '15px', top:'170px' }}>
+            <div className="card p-4 shadow-lg border-0" style={{ width: '100%', maxWidth: '500px', borderRadius: '15px',}}>
                 <div className="text-center mb-4">
                     <div className="login-img"></div>
+                    <img src={`${process.env.PUBLIC_URL}/tals.png`} alt="Descripción de la imagen" width="100%"/>
                     <h2 className="mt-2" style={{ color: '#333' }}>Bienvenido de nuevo</h2>
                     <p className="text-muted">Por favor, inicia sesión en tu cuenta</p>
                 </div>
