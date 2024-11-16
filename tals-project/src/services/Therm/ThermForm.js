@@ -86,8 +86,8 @@ const ThermForm = () => {
                         </div>
                         <div className="d-flex justify-content-evenly">
                             <input type="hidden" name="id" value={Level.id} onChange={HandleInputChange} className="form-control" required />
-                            <button type="submit" className="btn btn-primary">Submit</button>
-                            <a type="button" className="btn btn-secondary" href="/thermostat/">Return</a>
+                            <button type="submit" className="btn btn-primary">Guardar</button>
+                            <a type="button" className="btn btn-secondary" href="/thermostat/">Regresar</a>
                         </div>
                     </form>
                 </div>

@@ -81,7 +81,7 @@ const LightForm = () => {
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Encendido Automático:</label>
-                            <input type="time" step="00:00:00" name="horario_inicio" value={Lights.horario_inicio} onChange={HandleInputChange} className="form-control" required />
+                            <input type="time" step="00:00:00" name="horario_ini cio" value={Lights.horario_inicio} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Apagado Automático:</label>
@@ -89,8 +89,8 @@ const LightForm = () => {
                         </div>
                         <div className="d-flex flex-row justify-content-evenly">
                             <input type="hidden" name="id" value={Lights.id} onChange={HandleInputChange} className="form-control" required />
-                            <button type="submit" className="btn btn-primary">Submit</button>
-                            <a type="button" className="btn btn-secondary" href="/lights">Return</a>
+                            <button type="submit" className="btn btn-primary">Guardar</button>
+                            <a type="button" className="btn btn-secondary" href="/lights">Regrasar</a>
                         </div>
                     </form>
                 </div>
