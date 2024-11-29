@@ -36,11 +36,10 @@ const MSensorItem = () => {
 
     return(
         <div className="d-flex flex-row mb-3 justify-content-evenly">
-            <div className="d-flex flex-column">
+            <div className="d-flex">
                 <div className="card card-body">
                     <h3 className="card-tittle">Sensor de Movimiento: </h3>
                     <p className="card-text my-3">Estado: <strong>{getActivityStatus(Activity?.MotionSensor?.estado) || 'N/A'}</strong></p>
-                    <p className="card-text">Fecha de Registro: <strong>{Activity?.MotionSensor?.date || 'N/A'}</strong></p>
                 </div>
             </div>
         </div>

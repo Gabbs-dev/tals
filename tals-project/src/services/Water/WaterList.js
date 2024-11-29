@@ -78,11 +78,13 @@ const WTList = () => {
 
   return (
     <div className="row">
-      <h1 className="display-4 text-center">Panel de Control / Tanque de Agua</h1>
-      <hr className="divider" />
-      <div className="col">
-        <a className='btn btn-secondary' href='/'>Regresar</a>
+      <div className='col-md-8'>
+        <h1 className='display-4'>Panel de Control / Tanque de Agua</h1>
       </div>
+      <div className='col-md-2 mt-4'>
+        <a className='btn btn-secondary' href='/'><i className='bi bi-arrow-left'/> Regresar</a>
+      </div>
+      <hr className="divider" />
       <h2 className="display-6 mt-5">Nivel de Agua / Actividad</h2>
       <hr className="divider" />
       <div className="col-md-6">
@@ -137,7 +139,7 @@ const WTList = () => {
           </div>
         </div>
       </div>
-      <SprayList />
+      {/*}<SprayList />{*/}
     </div>
   );
 };

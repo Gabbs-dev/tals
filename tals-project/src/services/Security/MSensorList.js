@@ -5,16 +5,19 @@ const MSensorList = () => {
 
     return (
         <div className='row'>
-            <h1 className='display-6 mt-5'>Sensor de Movimiento / Actividad</h1>
+            <h1 className='display-6 mt-5'>Sensor de Movimiento</h1>
             <hr className='divider'/>
-            <div className="col-md-4">
+            <div className="col">
                 <MSensorItem/>
+                {/*}
                 <div className="card text-bg-light">
                     <div className="card-header">Historial</div>
                     <div className="card-body">
                     </div>
                 </div>
+                {*/}
             </div>
+            {/*}
             <div className="col-md-8">
                 <div className="card text-bg-light">
                     <div className="card-header">Resumen Global</div>

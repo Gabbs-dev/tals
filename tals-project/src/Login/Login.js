@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router";
+import React, { useState } from 'react';
 
 // Componentes de autenticación
 import { useAuth } from './AuthContext';
@@ -41,7 +40,7 @@ const Login = () => {
                 <div className="text-center mb-4">
                     <div className="login-img"></div>
                     <img src={`${process.env.PUBLIC_URL}/TALS5.png`} alt="Descripción de la imagen" width="80%"/>
-                    <p className="text-muted mt-5">Por favor, inicia sesión en tu cuenta</p>
+                    <p className="text-muted mt-1">Por favor, inicia sesión en tu cuenta</p>
                 </div>
                 <form onSubmit={handleLogin}>
                     <div className="mb-3">
@@ -60,6 +59,11 @@ const Login = () => {
                     </div>
                     <button type="submit" className="btn btn-primary w-100">Iniciar Sesión</button>
                 </form>
+                <div className='d-flex justify-content-center mt-3'>
+                    <a className=' btn btn-outline-dark w-100' href={`${process.env.PUBLIC_URL}/Manual de Usuario.pdf`} target='blank_'>
+                        Manual de Usuario
+                    </a>
+                </div>
             </div>
         </div>
         </div>

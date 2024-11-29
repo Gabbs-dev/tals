@@ -9,7 +9,7 @@ const WTForm = () => {
     const navigate = useNavigate();
     const params = useParams();
 
-    const initialState={id:0,nivel_maximo:"00",nivel_minimo:"00",altura:"0.0",diametro:"0.0"};
+    const initialState={id:0,nivel_maximo:"",nivel_minimo:"",altura:"",diametro:""};
     const [WaterTankLevels, setWTL]= useState(initialState);
 
     const HandleInputChange = (e) =>{
@@ -75,19 +75,19 @@ const WTForm = () => {
                     <form onSubmit={HandleSubmit}>
                         <div className="mb-3">
                             <label className="form-label">Nivel Máximo (%):</label>
-                            <input type="number" name="nivel_maximo" value={WaterTankLevels.nivel_maximo} onChange={HandleInputChange} className="form-control" required />
+                            <input type="number" name="nivel_maximo" min={1} max={100} value={WaterTankLevels.nivel_maximo} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Nivel Mínimo (%):</label>
-                            <input type="number" name="nivel_minimo" value={WaterTankLevels.nivel_minimo} onChange={HandleInputChange} className="form-control" required />
+                            <input type="number" name="nivel_minimo" min={1} max={100} value={WaterTankLevels.nivel_minimo} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Altura (mts):</label>
-                            <input type="number" step="0.1" name="altura" value={WaterTankLevels.altura} onChange={HandleInputChange} className="form-control" required />
+                            <input type="number" step="0.1" name="altura" min={0.1} max={40} value={WaterTankLevels.altura} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Diámetro (mts):</label>
-                            <input type="number" step="0.1" name="diametro" value={WaterTankLevels.diametro} onChange={HandleInputChange} className="form-control" required />
+                            <input type="number" step="0.1" name="diametro" min={0.1} max={40} value={WaterTankLevels.diametro} onChange={HandleInputChange} className="form-control" required />
                         </div>
                         <div className="d-flex justify-content-evenly">
                             <input type="hidden" name="id" value={WaterTankLevels.id} onChange={HandleInputChange} className="form-control" required />

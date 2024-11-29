@@ -27,6 +27,7 @@ const UsersList = () => {
             <h1 className='col-md-3'>Usuarios</h1>
             <div class="col-md-3 d-flex align-items-center">
                 <a class="btn btn-primary" href='/users/register'>Agregar Usuario</a>
+                <a className='btn btn-secondary mx-3' href='/'><i className='bi bi-arrow-left'/> Regresar</a>
             </div>
             <hr className="my-2"/>
             {Users.map((usuario)=>(

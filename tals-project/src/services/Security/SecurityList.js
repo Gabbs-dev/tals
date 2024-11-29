@@ -35,14 +35,16 @@ const SecurityList = () =>{
 
     return (
         <div className='row'>
-            <h1 className='display-4 text-center'>Panel de Control / Seguridad</h1>
-            <hr className='divider'/>
-            <div className="col">
-                <a className='btn btn-secondary' href='/'>Regresar</a>
+            <div className='col-md-8'>
+                <h1 className='display-4'>Panel de Control / Seguridad</h1>
             </div>
-            <h2 className='display-6 mt-5'>Control de Camaras / Actividad</h2>
+            <div className='col-md-2 mt-4'>
+                <a className='btn btn-secondary' href='/'><i className='bi bi-arrow-left'/> Regresar</a>
+            </div>
             <hr className='divider'/>
             <div className="col-md-8 my-2">
+                <h2 className='display-6 mt-5'>Control de Camaras / Actividad</h2>
+                <hr className='divider'/>
                 <div className="card text-bg-light">
                     <div className="card-header">Camaras</div>
                     <div className="card-body text-center">
@@ -54,15 +56,17 @@ const SecurityList = () =>{
                     </div>
                 </div>
             </div>
-            <div className="col-md-4 my-2">
+            <div className="col-md-4 my-3">
+                <MSensorList />
+                {/*}
                 <div className="card text-bg-light">
                     <div className="card-header">Camaras / Actividad</div>
                     <div className="card-body">
                         <SecurityChart/>
                     </div>
                 </div>
+                {*/}
             </div>
-            <MSensorList />
         </div>
     );
 };

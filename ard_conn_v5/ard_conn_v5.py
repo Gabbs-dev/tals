@@ -73,7 +73,7 @@ async def insertar_luz(luz1,luz2,luz3,luz4,luz5,luz6):
 async def recibir_y_guardar_datos():
   ser = serial.Serial('COM2',9600)
   while True:
-    data = ser.readline().decode('utf-8').strip()
+    data = ser.readline().decode('ascii').strip()
     if data:
       try:
         # Convertir el string JSON a un diccionario

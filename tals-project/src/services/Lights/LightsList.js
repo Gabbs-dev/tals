@@ -38,11 +38,13 @@ const LightsList = () => {
 
     return (
         <div className='row'>
-            <h1 className='display-4'>Panel de Control / Luminarias</h1>
-            <hr className='divider'/>
-            <div className="col">
-                <a className='btn btn-secondary' href='/'>Regresar</a>
+            <div className='col-md-8'>
+                <h1 className='display-4'>Panel de Control / Luminarias</h1>
             </div>
+            <div className='col-md-2 mt-4'>
+                <a className='btn btn-secondary' href='/'><i className='bi bi-arrow-left'/> Regresar</a>
+            </div>
+            <hr className='divider'/>
             <h3 className='display-6 mt-4'>Dispositivos Disponibles</h3>
             <hr className='divider'/>
             <div className="col-md-6">

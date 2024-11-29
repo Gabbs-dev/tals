@@ -35,14 +35,16 @@ const Header = () => {
                         <div className="offcanvas-body">
                             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                                 <li className="nav-item">
-                                    <a className="nav-link active" aria-current="page" href="/"><i class="bi bi-speedometer"/> Dashboard</a>
+                                    <a className="nav-link active" aria-current="page" href="/"><i class="bi bi-speedometer"/> Panel principal</a>
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link active" href="/users"><i class="bi bi-people"/> Usuarios</a>
                                 </li>
+                                {/*}
                                 <li className="nav-item">
                                     <a className="nav-link active" href="/reports"><i class="bi bi-clipboard-data"/> Reportes</a>
                                 </li>
+                                {*/}
                                 <li className="nav-item">
                                     <button onClick={logout} className='nav-link active'><i class="bi bi-door-closed"></i> Cerrar sesión</button>
                                 </li>
