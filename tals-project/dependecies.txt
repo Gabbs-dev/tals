@@ -1,0 +1,4 @@
+node
+bootstrap
+bootstrap-icons
+axios
